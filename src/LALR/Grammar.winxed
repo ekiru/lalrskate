@@ -1,0 +1,36 @@
+namespace LALR {
+
+class Grammar {
+    var rules;
+    var start;
+
+    function init [vtable]() {
+        self.rules = {};
+    }
+
+    function start(string name [optional], int has_name [opt_flag]) {
+        if (has_name) {
+            self.start = name;
+        }
+        return self.start;
+    }
+
+    function rules() {
+        return self.rules;
+    }
+
+    function rule(string name) {
+        if (exists self.rules[name])
+            return self.rules[name];
+        else
+            return null;
+    }
+
+    function add_rule(string name, rhs [slurpy]) {
+        if (!exists self.rules[name])
+            self.rules[name] = [];
+        ${ push self.rules[name], rhs };
+    }
+}
+
+}

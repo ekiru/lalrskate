@@ -1,0 +1,34 @@
+#!/usr/bin/env winxed
+
+function main[main](argv) {
+    load_bytecode('distutils.pbc');
+    load_bytecode('rosella/winxed.pbc');
+    var lalr = {
+        "name"              : "LALR",
+        "abstract"          : "LALR parser generator for Parrot",
+        "authority"         : "http://github.com/ekiru",
+        "copyright_holder"  : "Tyler Curtis",
+        "keywords"          : ["lalr", "parsing"],
+        "license_type"      : "Artistic License 2.0",
+        "license_uri"       : "http://www.perlfoundation.org/artistic_license_2_0",
+        "pir_winxed"        : {
+            "src/LALR/Grammar.pir"  : "src/LALR/Grammar.winxed"
+        },
+        "pbc_pir"           : {
+            "src/LALR/Grammar.pbc"  : "src/LALR/Grammar.pir"
+        },
+        "pbc_pbc"           : {
+            "lalr.pbc"          : ["src/LALR/Grammar.pbc"]
+        },
+        "inst_lib"          : [
+            "lalr.pbc"
+        ],
+        "test_exec"         : "winxed",
+        "test_files"        : "t/*.t"
+    };
+
+    using Rosella.Winxed.Distutils.winxed_setup;
+    winxed_setup();
+    argv.shift();
+    setup(argv, lalr);
+}
