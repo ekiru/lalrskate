@@ -1,0 +1,13 @@
+# LALRskate - a LALR parser generator for Parrot.
+
+This will eventually allow one to write a program that builds up an object representing a grammar and then generate Winxed code implementing a parser for the language specified by the grammar.
+
+Eventually, I plan to even write a tool which takes a text file describing the grammar and builds the grammar object for you. But first I have to write the parser generator so I can use it to parse the grammar specifications.
+
+# The name
+
+I am bad with coming up with names for projects. Dukeleto suggested this one, and given that it would mean that I could name some debugging tool that prints out the details about a grammar LALRcat, I went with it.
+
+# License
+
+LALRskate is licensed under the Artistic License 2.0. See the LICENSE file.
