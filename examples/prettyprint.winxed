@@ -11,20 +11,5 @@ function main[main](argv) {
     grammar.add_rule("Term", "zero");
     grammar.add_rule("Term", "left_paren", "Expr", "right_paren");
 
-    prettyprint(grammar);
-}
-
-function prettyprint(grammar) {
-    string start = grammar.start();
-    print("%start " + start + "\n");
-    print("%%\n");
-    for (string name in grammar.rules()) {
-        for (var production in grammar.rule(name)) {
-            print(name + " <-");
-            for (string rhs_part in production) {
-                print(" " + rhs_part);
-            }
-            print("\n");
-        }
-    }
+    print(grammar.as_bnf_string());
 }
