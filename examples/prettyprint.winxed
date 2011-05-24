@@ -1,7 +1,7 @@
 #!/usr/bin/env winxed
 
 function main[main](argv) {
-    ${ load_bytecode "lalr.pbc" };
+    load_bytecode('lalr.pbc');
     var grammar;
     ${ new grammar, class LALR.Grammar };
     grammar.start("Expr");
