@@ -23,7 +23,7 @@ function main[main](argv) {
         "inst_lib"          : [
             "lalr.pbc"
         ],
-        "test_exec"         : "winxed",
+        "test_exec"         : "winxed --nowarn",
         "test_files"        : "t/*.t"
     };
 
