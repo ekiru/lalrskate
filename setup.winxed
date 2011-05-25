@@ -12,13 +12,18 @@ function main[main](argv) {
         "license_type"      : "Artistic License 2.0",
         "license_uri"       : "http://www.perlfoundation.org/artistic_license_2_0",
         "pir_winxed"        : {
-            "src/LALR/Grammar.pir"  : "src/LALR/Grammar.winxed"
+            "src/LALR/Grammar.pir"  : "src/LALR/Grammar.winxed",
+            "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
         },
         "pbc_pir"           : {
-            "src/LALR/Grammar.pbc"  : "src/LALR/Grammar.pir"
+            "src/LALR/Grammar.pbc"  : "src/LALR/Grammar.pir",
+            "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
         },
         "pbc_pbc"           : {
-            "lalr.pbc"          : ["src/LALR/Grammar.pbc"]
+            "lalr.pbc"          : [
+                "src/LALR/Grammar.pbc",
+                "src/LALR/Grammar/Prettyprint/BNF.pbc"
+            ]
         },
         "inst_lib"          : [
             "lalr.pbc"

@@ -1,0 +1,25 @@
+namespace LALR {
+namespace Grammar {
+namespace Prettyprint {
+
+class BNF {
+    function prettyprint(grammar) {
+        string result = "";
+        string start = grammar.start();
+        result += "%start " + start + "\n";
+        result += "%%\n";
+        for (string name in grammar.rules()) {
+            for (var production in grammar.rule(name)) {
+                result += name + " <-";
+                for (string rhs_part in production) {
+                    result += " " + rhs_part;
+                }
+                result += "\n";
+            }
+        }
+        return result;
+    }
+}
+}
+}
+}

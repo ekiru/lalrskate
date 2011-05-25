@@ -33,20 +33,8 @@ class Grammar {
     }
 
     function as_bnf_string() {
-        string result = "";
-        string start = self.start();
-        result += "%start " + start + "\n";
-        result += "%%\n";
-        for (string name in self.rules()) {
-            for (var production in self.rule(name)) {
-                result += name + " <-";
-                for (string rhs_part in production) {
-                    result += " " + rhs_part;
-                }
-                result += "\n";
-            }
-        }
-        return result;
+        var printer = new LALR.Grammar.Prettyprint.BNF;
+        return printer.prettyprint(self);
     }
 
 }
