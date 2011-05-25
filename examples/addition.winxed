@@ -2,8 +2,7 @@
 
 function main[main](argv) {
     load_bytecode('lalr.pbc');
-    var grammar;
-    ${ new grammar, class LALR.Grammar };
+    var grammar = new LALR.Grammar;
     grammar.start("Expr");
     grammar.add_rule("Expr", "Term");
     grammar.add_rule("Expr", "Term", "plus", "Term");
