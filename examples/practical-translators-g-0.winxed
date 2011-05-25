@@ -1,0 +1,22 @@
+#!/usr/bin/env winxed
+
+// The G_0 from page 29 of "Practical Translators for LR(k) Languages".
+// It's LR(0).
+
+function main[main](argv) {
+    load_bytecode('lalr.pbc');
+    var grammar = new LALR.Grammar;
+    grammar.start("S");
+
+    grammar.add_rule("S", "E");
+
+    grammar.add_rule("E", "a", "A");
+    grammar.add_rule("A", "c", "A");
+    grammar.add_rule("A", "d");
+
+    grammar.add_rule("E", "b", "B");
+    grammar.add_rule("B", "c", "B");
+    grammar.add_rule("B", "d");
+
+    print(grammar.as_bnf_string());
+}
