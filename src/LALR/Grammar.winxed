@@ -1,5 +1,20 @@
 namespace LALR {
 
+/*
+ * The LALR.Grammar class is used to represent grammars.
+ *
+ * A grammar has a start symbol, which is the name of the symbol from which
+ * the generation of a string must begin and at which the parsing of a
+ * string must eventually arrive, if successful.
+ *
+ * A grammar also has a set of productions. A production states that a
+ * particular symbol consists of a particular sequence of symbols.
+ *
+ * A grammar also has, conceptually, two sets of nonterminal and terminal,
+ * respectively, symbols. Conventionally, terminal symbols have names
+ * composed of all lower-case letters, and nonterminal symbols have
+ * names which begin with an uppercase letter.
+ */
 class Grammar {
     var rules;
     var start;
@@ -8,6 +23,9 @@ class Grammar {
         self.rules = {};
     }
 
+    /* g.start() returns the name of the start symbol.
+     * g.start(name) sets the start symbol to name.
+     */
     function start(string name [optional], int has_name [opt_flag]) {
         if (has_name) {
             self.start = name;
@@ -19,6 +37,9 @@ class Grammar {
         return self.rules;
     }
 
+    /* g.rule(name) returns the list of rules for the provided non-terminal
+     * The behavior is unspecified if this list is modified.
+     */
     function rule(string name) {
         if (exists self.rules[name])
             return self.rules[name];
@@ -26,12 +47,20 @@ class Grammar {
             return null;
     }
 
+    /* g.rule(name, ...) adds a production stating that the nonterminal name
+     * can produce the sequence of nonterminal or terminal names following it.
+     * g.rule(name) adds a production stating that the nonterminal name can
+     * produce the empty string.
+     */
     function add_rule(string name, rhs [slurpy]) {
         if (!exists self.rules[name])
             self.rules[name] = [];
         ${ push self.rules[name], rhs };
     }
 
+    /* g.as_bnf_string() produces a string that describes the grammar using
+     * a syntax partially inspired by yacc and partially by BNF.
+     */
     function as_bnf_string() {
         var printer = new LALR.Grammar.Prettyprint.BNF;
         return printer.prettyprint(self);
