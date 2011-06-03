@@ -12,6 +12,9 @@ class LALRGrammarTest {
     function test_creation() {
         using LALR.Grammar;
         var g = new LALR.Grammar;
+        g.add_nonterminal("List");
+        g.add_nonterminal("Element");
+        g.add_terminal("number");
         g.start("List");
         g.add_rule("List");
         g.add_rule("List", "Element", "List");
