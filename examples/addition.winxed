@@ -3,6 +3,15 @@
 function main[main](argv) {
     load_bytecode('lalr.pbc');
     var grammar = new LALR.Grammar;
+    grammar.add_nonterminal("Expr");
+    grammar.add_nonterminal("Term");
+
+    grammar.add_terminal("plus");
+    grammar.add_terminal("one");
+    grammar.add_terminal("zero");
+    grammar.add_terminal("left_paren");
+    grammar.add_terminal("right_paren");
+
     grammar.start("Expr");
     grammar.add_rule("Expr", "Term");
     grammar.add_rule("Expr", "Term", "plus", "Term");
