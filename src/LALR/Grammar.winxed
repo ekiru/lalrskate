@@ -27,7 +27,8 @@ class Grammar {
         self.terminals = {};
     }
 
-    /* g.start() returns the name of the start symbol.
+    /* g.start() returns the name of the start symbol, which must be a
+     * nonterminal in the grammar.
      * g.start(name) sets the start symbol to name.
      */
     function start(string name [optional], int has_name [opt_flag]) {
@@ -38,6 +39,9 @@ class Grammar {
         return self.start;
     }
 
+    /* Produces a list of the nonterminals in the grammar. Modifying
+     * this list has no effect on the grammar.
+     */
     function nonterminals() {
         var list = [];
         for (var nonterm in self.nonterminals) {
@@ -46,19 +50,27 @@ class Grammar {
         return list;
     }
 
+    /* Adds a new nonterminal to the grammar. */
     function add_nonterminal(string name) {
         self.nonterminals[name] = 1;
     }
 
+    /* Tests whether the grammar contains a nonterminal with the given name. */
     function is_nonterminal(string name) {
         return exists self.nonterminals[name];
     }
 
+    /* Internal: throws an exception if the given name is not a nonterminal
+     * in the grammar.
+     */
     function expect_nonterminal(string name) {
         if (!self.is_nonterminal(name))
             throw "Symbol " + name + " is not a nonterminal in grammar.";
     }
 
+    /* Produces a list of the terminals in the grammar. Modifying this
+     * list has no effect on the grammar.
+     */
     function terminals() {
         var list = [];
         for (var term in self.terminals) {
@@ -67,23 +79,34 @@ class Grammar {
         return list;
     }
 
+    /* Adds a new terminal symbol to the grammar. */
     function add_terminal(string name) {
         self.terminals[name] = 1;
     }
 
+    /* Tests whether the grammar contains a terminal with the given name. */
     function is_terminal(string name) {
         return exists self.terminals[name];
     }
 
+    /* Internal: throws an exception if the given name is not a terminal
+     * in the grammar.
+     */
     function expect_terminal(string name) {
         if (!self.is_terminal(name))
             throw "Symbol " + name + " is not a terminal in grammar.";
     }
 
+    /* Tests whether the grammar contains either a terminal or a nonterminal
+     * symbol with the given name.
+     */
     function is_symbol(string name) {
         return self.is_nonterminal(name) || self.is_terminal(name);
     }
 
+    /* Internal: throws an exception if the given name is not a symbol
+     * in the grammar.
+     */
     function expect_symbol(string name) {
         if (!self.is_symbol(name))
             throw "Symbol " + name + " is neither a terminal nor a nonterminal in grammar.";
