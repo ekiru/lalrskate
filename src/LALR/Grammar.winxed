@@ -18,9 +18,13 @@ namespace LALR {
 class Grammar {
     var rules;
     var start;
+    var nonterminals;
+    var terminals;
 
     function init [vtable]() {
         self.rules = {};
+        self.nonterminals = {}; // Using a Hash as a set.
+        self.terminals = {};
     }
 
     /* g.start() returns the name of the start symbol.
@@ -28,13 +32,61 @@ class Grammar {
      */
     function start(string name [optional], int has_name [opt_flag]) {
         if (has_name) {
+            self.expect_nonterminal(name);
             self.start = name;
         }
         return self.start;
     }
 
-    function rules() {
-        return self.rules;
+    function nonterminals() {
+        var list = [];
+        for (var nonterm in self.nonterminals) {
+            ${ push list, nonterm };
+        }
+        return list;
+    }
+
+    function add_nonterminal(string name) {
+        self.nonterminals[name] = 1;
+    }
+
+    function is_nonterminal(string name) {
+        return exists self.nonterminals[name];
+    }
+
+    function expect_nonterminal(string name) {
+        if (!self.is_nonterminal(name))
+            throw "Symbol " + name + " is not a nonterminal in grammar.";
+    }
+
+    function terminals() {
+        var list = [];
+        for (var term in self.terminals) {
+            ${ push list, term };
+        }
+        return list;
+    }
+
+    function add_terminal(string name) {
+        self.terminals[name] = 1;
+    }
+
+    function is_terminal(string name) {
+        return exists self.terminals[name];
+    }
+
+    function expect_terminal(string name) {
+        if (!self.is_terminal(name))
+            throw "Symbol " + name + " is not a terminal in grammar.";
+    }
+
+    function is_symbol(string name) {
+        return self.is_nonterminal(name) || self.is_terminal(name);
+    }
+
+    function expect_symbol(string name) {
+        if (!self.is_symbol(name))
+            throw "Symbol " + name + " is neither a terminal nor a nonterminal in grammar.";
     }
 
     /* g.rule(name) returns the list of rules for the provided non-terminal
@@ -53,8 +105,12 @@ class Grammar {
      * produce the empty string.
      */
     function add_rule(string name, rhs [slurpy]) {
+        self.expect_nonterminal(name);
         if (!exists self.rules[name])
             self.rules[name] = [];
+        for (var symbol in rhs) {
+            self.expect_symbol(symbol);
+        }
         ${ push self.rules[name], rhs };
     }
 
