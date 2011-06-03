@@ -8,7 +8,7 @@ class BNF {
         string start = grammar.start();
         result += "%start " + start + "\n";
         result += "%%\n";
-        for (string name in grammar.rules()) {
+        for (string name in grammar.nonterminals()) {
             for (var production in grammar.rule(name)) {
                 result += name + " <-";
                 for (string rhs_part in production) {
