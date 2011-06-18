@@ -1,0 +1,15 @@
+namespace LALR {
+namespace DPDA {
+
+class TopTransition : LALR.DPDA.Transition {
+    var expected;
+    function expected(string expected[optional], int has_expected[opt_flag]) {
+	if (has_expected) {
+	    self.expected = expected;
+	}
+	return self.expected;
+    }
+}
+
+}
+}

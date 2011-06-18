@@ -1,0 +1,55 @@
+namespace LALR {
+
+class DPDA {
+    var input;
+    var stack;
+    var states;
+    var transitions;
+
+    function init[vtable]() {
+	self.stack = [];
+	self.states = {};
+	self.transitions = {};
+    }
+
+    function BUILD(input[named]) {
+	self.input = input;
+    }
+
+    function states() {
+	var result = [];
+	for (string state in self.states) {
+	    ${ push result, state };
+	}
+	return result;
+    }
+
+    function add_state(string name) {
+	self.states[name] = 1;
+	self.transitions[name] = [];
+    }
+
+    function is_state(string name) {
+	return self.states[name] == 1;
+    }
+
+    function expect_state(string name) {
+	if (!self.is_state(name)) {
+	    throw "State " + name + " is not present in the automaton.";
+	}
+    }
+
+    function add_transition_from(string from, var transition) {
+	self.expect_state(from);
+	self.expect_state(transition.to());
+	${ push self.transitions[from], transition };
+    }
+
+    function transitions_from(string from) {
+	self.expect_state(from);
+	return self.transitions[from];
+    }
+
+}
+
+}

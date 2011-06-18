@@ -1,0 +1,17 @@
+namespace LALR {
+namespace DPDA {
+
+/* LALR.DPDA.Transition is the base class for transitions. */
+class Transition {
+    /* .to() is the state to which the transition leads. */
+    var to;
+    function to(string to[optional], int has_to[opt_flag]) {
+	if (has_to) {
+	    self.to = to;
+	}
+	return self.to;
+    }
+}
+
+}
+}

@@ -1,0 +1,23 @@
+namespace LALR {
+namespace DPDA {
+
+class ReduceTransition : LALR.DPDA.Transition {
+    var pop_count;
+    function pop_count(int count[optional], int has_count[opt_flag]) {
+	if (has_count) {
+	    self.pop_count = count;
+	}
+	return self.pop_count;
+    }
+
+    var output;
+    function output(var output[optional], int has_output[opt_flag]) {
+	if (has_output) {
+	    self.output = output;
+	}
+	return self.output;
+    }
+}
+
+}
+}

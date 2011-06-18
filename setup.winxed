@@ -13,15 +13,33 @@ function main[main](argv) {
         "license_uri"       : "http://www.perlfoundation.org/artistic_license_2_0",
         "pir_winxed"        : {
             "src/LALR/Grammar.pir"  : "src/LALR/Grammar.winxed",
+	    "src/LALR/DPDA.pir"     : "src/LALR/DPDA.winxed",
+	    "src/LALR/DPDA/Transition.pir"          : "src/LALR/DPDA/Transition.winxed",
+	    "src/LALR/DPDA/PushTransition.pir"      : "src/LALR/DPDA/PushTransition.winxed",
+	    "src/LALR/DPDA/ReadTransition.pir"      : "src/LALR/DPDA/ReadTransition.winxed",
+	    "src/LALR/DPDA/ReduceTransition.pir"    : "src/LALR/DPDA/ReduceTransition.winxed",
+	    "src/LALR/DPDA/TopTransition.pir"       : "src/LALR/DPDA/TopTransition.winxed",
             "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
         },
         "pbc_pir"           : {
             "src/LALR/Grammar.pbc"  : "src/LALR/Grammar.pir",
+	    "src/LALR/DPDA.pbc"     : "src/LALR/DPDA.pir",
+	    "src/LALR/DPDA/Transition.pbc"          : "src/LALR/DPDA/Transition.pir",
+	    "src/LALR/DPDA/PushTransition.pbc"      : "src/LALR/DPDA/PushTransition.pir",
+	    "src/LALR/DPDA/ReadTransition.pbc"      : "src/LALR/DPDA/ReadTransition.pir",
+	    "src/LALR/DPDA/ReduceTransition.pbc"    : "src/LALR/DPDA/ReduceTransition.pir",
+	    "src/LALR/DPDA/TopTransition.pbc"       : "src/LALR/DPDA/TopTransition.pir",
             "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
         },
         "pbc_pbc"           : {
             "lalr.pbc"          : [
                 "src/LALR/Grammar.pbc",
+		"src/LALR/DPDA.pbc",
+		"src/LALR/DPDA/Transition.pbc",
+		"src/LALR/DPDA/PushTransition.pbc",
+		"src/LALR/DPDA/ReadTransition.pbc",
+		"src/LALR/DPDA/ReduceTransition.pbc",
+		"src/LALR/DPDA/TopTransition.pbc",
                 "src/LALR/Grammar/Prettyprint/BNF.pbc"
             ]
         },
