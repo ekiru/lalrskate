@@ -32,6 +32,8 @@ namespace Generator {
 	using LALR.Generator.BuildCFSM.cfsm_state_for;
 	using LALR.Generator.BuildCFSM.anon_state;
 
+	using LALR.DPDA.EPSILON;
+
 	for (string nonterminal in grammar.nonterminals()) {
 	    string base_state = cfsm_state_for(nonterminal);
 	    cfsm.add_state(base_state);
@@ -59,7 +61,7 @@ namespace Generator {
 			cfsm.add_state(nonterminal_state);
 			var to_nonterminal = new LALR.DPDA.ReadTransition;
 			to_nonterminal.to(nonterminal_state);
-			to_nonterminal.symbol("___EPSILON");
+			to_nonterminal.symbol(EPSILON());
 			cfsm.add_transition_from(state, to_nonterminal);
 
 			string continuation_state = anon_state();
@@ -76,8 +78,12 @@ namespace Generator {
 		hash_transition.symbol(hash_state);
 		hash_transition.to(hash_state);
 		cfsm.add_transition_from(state, hash_transition);
+
+		production_count++;
 	    }
 	}
+
+	cfsm.start(cfsm_state_for(grammar.start()));
 
 	return cfsm;
     }
