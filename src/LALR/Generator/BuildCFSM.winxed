@@ -1,0 +1,86 @@
+namespace LALR {
+namespace Generator {
+
+    namespace BuildCFSM {
+	function next_id() {
+	    int id = 0;
+	    next:
+	    yield id;
+	    id++;
+	    goto next;
+	}
+
+	function hash_state_for(string nonterminal, string i) {
+	    return "__build_CFSM__HASH__" + nonterminal + "__" + i;
+	}
+
+	function cfsm_state_for(string nonterminal) {
+	    return "__build_CFSM__" + nonterminal;
+	}
+
+	function anon_state() {
+	    string id = next_id();
+	    return "__build_CFSM__ANON__" + id;
+	}
+
+    }
+
+    function build_CFSM(grammar) {
+	var cfsm = new LALR.DPDA;
+
+	using LALR.Generator.BuildCFSM.hash_state_for;
+	using LALR.Generator.BuildCFSM.cfsm_state_for;
+	using LALR.Generator.BuildCFSM.anon_state;
+
+	for (string nonterminal in grammar.nonterminals()) {
+	    string base_state = cfsm_state_for(nonterminal);
+	    cfsm.add_state(base_state);
+	    int production_count = 0;
+	    for (var production in grammar.rule(nonterminal)) {
+		string hash_state = hash_state_for(nonterminal, production_count++);
+		string state = base_state;
+		for (string symbol in production) {
+		    if (grammar.is_terminal(symbol)) {
+			// In this case, we read the nonterminal and move on.
+			string new_state = anon_state();
+			cfsm.add_state(new_state);
+			var read = new LALR.DPDA.ReadTransition;
+			read.to(new_state);
+			read.symbol(symbol);
+			string to = read.to();
+			string symbol_ = read.symbol();
+			cfsm.add_transition_from(state, read);
+			state = new_state;
+		    } else {
+			// Here, we have to create two new states, one
+			// which continues onward, and one which goes to
+			// the CFSM state for the nonterminal.
+			string nonterminal_state = cfsm_state_for(symbol);
+			cfsm.add_state(nonterminal_state);
+			var to_nonterminal = new LALR.DPDA.ReadTransition;
+			to_nonterminal.to(nonterminal_state);
+			to_nonterminal.symbol("___EPSILON");
+			cfsm.add_transition_from(state, to_nonterminal);
+
+			string continuation_state = anon_state();
+			cfsm.add_state(continuation_state);
+			var continuation = new LALR.DPDA.ReadTransition;
+			continuation.to(continuation_state);
+			continuation.symbol(symbol);
+			cfsm.add_transition_from(state, continuation);
+			state = continuation_state;
+		    }
+		}
+		var hash_transition = new LALR.DPDA.ReadTransition;
+		cfsm.add_state(hash_state);
+		hash_transition.symbol(hash_state);
+		hash_transition.to(hash_state);
+		cfsm.add_transition_from(state, hash_transition);
+	    }
+	}
+
+	return cfsm;
+    }
+
+}
+}

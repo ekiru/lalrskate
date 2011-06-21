@@ -18,6 +18,7 @@ function main[main](argv) {
 	    "src/LALR/DPDA/ReadTransition.pir"      : "src/LALR/DPDA/ReadTransition.winxed",
 	    "src/LALR/DPDA/ReduceTransition.pir"    : "src/LALR/DPDA/ReduceTransition.winxed",
 	    "src/LALR/DPDA/TopTransition.pir"       : "src/LALR/DPDA/TopTransition.winxed",
+	    "src/LALR/Generator/BuildCFSM.pir"      : "src/LALR/Generator/BuildCFSM.winxed",
             "src/LALR/Grammar.pir"                  : "src/LALR/Grammar.winxed",
             "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
         },
@@ -28,6 +29,7 @@ function main[main](argv) {
 	    "src/LALR/DPDA/ReadTransition.pbc"      : "src/LALR/DPDA/ReadTransition.pir",
 	    "src/LALR/DPDA/ReduceTransition.pbc"    : "src/LALR/DPDA/ReduceTransition.pir",
 	    "src/LALR/DPDA/TopTransition.pbc"       : "src/LALR/DPDA/TopTransition.pir",
+	    "src/LALR/Generator/BuildCFSM.pbc"      : "src/LALR/Generator/BuildCFSM.pir",
             "src/LALR/Grammar.pbc"                  : "src/LALR/Grammar.pir",
             "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
         },
@@ -39,6 +41,7 @@ function main[main](argv) {
 		"src/LALR/DPDA/ReadTransition.pbc",
 		"src/LALR/DPDA/ReduceTransition.pbc",
 		"src/LALR/DPDA/TopTransition.pbc",
+		"src/LALR/Generator/BuildCFSM.pbc",
                 "src/LALR/Grammar.pbc",
                 "src/LALR/Grammar/Prettyprint/BNF.pbc"
             ]
