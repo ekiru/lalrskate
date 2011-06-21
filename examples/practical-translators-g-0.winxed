@@ -28,5 +28,35 @@ function main[main](argv) {
     grammar.add_rule("B", "c", "B");
     grammar.add_rule("B", "d");
 
-    print(grammar.as_bnf_string());
+//    print(grammar.as_bnf_string());
+
+    using LALR.Generator.build_CFSM;
+
+    prettyprint(build_CFSM(grammar));
+}
+
+function prettyprint(dpda) {
+    say ("digraph DPDA {");
+
+    for (string state in dpda.states()) {
+	string label;
+	string beginning = substr(state, 0, 18);
+	if (beginning == "__build_CFSM__ANON") {
+	    label = "";
+	} else {
+	    label = state;
+	}
+	say("\t" + state + ' [label="' + label +  '", shape=box];');
+    }
+    say("");
+
+    for (string state in dpda.states()) {
+	for (var transition in dpda.transitions_from(state)) {
+	    string to = transition.to();
+	    string under = transition.symbol();
+	    say("\t" + state + " -> " + to + '[label="' + under + '"];');
+	}
+    }
+    say("}");
+
 }
