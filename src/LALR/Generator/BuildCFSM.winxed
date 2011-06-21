@@ -36,7 +36,7 @@ namespace Generator {
 
 	for (string nonterminal in grammar.nonterminals()) {
 	    string base_state = cfsm_state_for(nonterminal);
-	    cfsm.add_state(base_state);
+	    cfsm.add_state_if_not_present(base_state);
 	    int production_count = 0;
 	    for (var production in grammar.rule(nonterminal)) {
 		string hash_state = hash_state_for(nonterminal, production_count++);
@@ -45,7 +45,7 @@ namespace Generator {
 		    if (grammar.is_terminal(symbol)) {
 			// In this case, we read the nonterminal and move on.
 			string new_state = anon_state();
-			cfsm.add_state(new_state);
+			cfsm.add_state_if_not_present(new_state);
 			var read = new LALR.DPDA.ReadTransition;
 			read.to(new_state);
 			read.symbol(symbol);
@@ -58,14 +58,14 @@ namespace Generator {
 			// which continues onward, and one which goes to
 			// the CFSM state for the nonterminal.
 			string nonterminal_state = cfsm_state_for(symbol);
-			cfsm.add_state(nonterminal_state);
+			cfsm.add_state_if_not_present(nonterminal_state);
 			var to_nonterminal = new LALR.DPDA.ReadTransition;
 			to_nonterminal.to(nonterminal_state);
 			to_nonterminal.symbol(EPSILON());
 			cfsm.add_transition_from(state, to_nonterminal);
 
 			string continuation_state = anon_state();
-			cfsm.add_state(continuation_state);
+			cfsm.add_state_if_not_present(continuation_state);
 			var continuation = new LALR.DPDA.ReadTransition;
 			continuation.to(continuation_state);
 			continuation.symbol(symbol);
@@ -74,7 +74,7 @@ namespace Generator {
 		    }
 		}
 		var hash_transition = new LALR.DPDA.ReadTransition;
-		cfsm.add_state(hash_state);
+		cfsm.add_state_if_not_present(hash_state);
 		hash_transition.symbol(hash_state);
 		hash_transition.to(hash_state);
 		cfsm.add_transition_from(state, hash_transition);

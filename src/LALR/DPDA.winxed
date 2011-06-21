@@ -46,8 +46,13 @@ class DPDA {
 	self.transitions[name] = [];
     }
 
+    function add_state_if_not_present(string name) {
+	if (!self.is_state(name))
+	    self.add_state(name);
+    }
+
     function is_state(string name) {
-	return self.states[name] == 1;
+	return exists self.states[name];
     }
 
     function expect_state(string name) {
@@ -60,6 +65,8 @@ class DPDA {
 	self.expect_state(from);
 	self.expect_state(transition.to());
 	${ push self.transitions[from], transition };
+	string to = transition.to();
+	string symbol = transition.symbol();
     }
 
     function transitions_from(string from) {
