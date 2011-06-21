@@ -3,7 +3,7 @@ namespace DPDA {
 
 class ReadTransition : LALR.DPDA.Transition {
     var symbol;
-    function symbol(string symbol[optional], int has_symbol[opt_flag]) {
+    function symbol(symbol[optional], int has_symbol[opt_flag]) {
 	if (has_symbol) {
 	    self.symbol = symbol;
 	}
