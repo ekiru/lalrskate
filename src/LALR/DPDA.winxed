@@ -1,10 +1,19 @@
 namespace LALR {
 
+namespace DPDA {
+
+    function EPSILON() {
+	return "__LALR__DPDA_EPSILON";
+    }
+
+}
+
 class DPDA {
     var input;
     var stack;
     var states;
     var transitions;
+    var start;
 
     function init[vtable]() {
 	self.stack = [];
@@ -14,6 +23,14 @@ class DPDA {
 
     function BUILD(input[named]) {
 	self.input = input;
+    }
+
+    function start(string start[optional], int has_start[opt_flag]) {
+	if (has_start) {
+	    self.expect_state(start);
+	    self.start = start;
+	}
+	return self.start;
     }
 
     function states() {
