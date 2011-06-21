@@ -67,5 +67,28 @@ class BuildCFSMTest {
 	self.assert.equal(hash_state_for("E", 0), transition.symbol());
 	self.assert.equal(0, cfsm.transitions_from(transition.to()));
     }
+    
+    // This test case comes from G_0, where it wasn't initially working.
+    function test_A_to_c_A_and_A_to_d() {
+	using LALR.DPDA.EPSILON;
+	using LALR.Generator.build_CFSM;
+	using LALR.Generator.BuildCFSM.hash_state_for;
+
+	var grammar = new LALR.Grammar;
+	grammar.add_nonterminal("A");
+	grammar.add_terminal("c");
+	grammar.add_terminal("d");
+
+	grammar.start("A");
+
+	grammar.add_rule("A", "c", "A");
+	grammar.add_rule("A", "d");
+
+	var cfsm = build_CFSM(grammar);
+
+	var state = cfsm.start();
+	var transitions = cfsm.transitions_from(state);
+	self.assert.equal(2, transitions);
+    }
 
 }
