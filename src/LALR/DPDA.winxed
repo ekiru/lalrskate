@@ -93,7 +93,9 @@ class DPDA {
     function is_adequate() {
 	int result = 1;
 	for (string state in self.states) {
-	    result &&= self.is_state_adequate(state);
+	    result = self.is_state_adequate(state);
+	    if (!result)
+		break;
 	}
 	return result;
     }
