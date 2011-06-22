@@ -25,6 +25,8 @@ namespace Generator {
 
     }
 
+    /* build_CFSM(grammar) returns a DPDA representing the
+       Characteristic Finite State Machine of the grammar. */
     function build_CFSM(grammar) {
 	var cfsm = new LALR.DPDA;
 
