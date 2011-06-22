@@ -1,0 +1,23 @@
+namespace LALR {
+namespace Generator {
+
+
+    function build_nonterminal_transition_table(grammar, cfsm) {
+	var table = {};
+	for (string nonterminal in grammar.nonterminals()) {
+	    table[nonterminal] = [];
+	}
+
+	for (string state in cfsm.states()) {
+	    for (var transition in cfsm.transitions_from(state)) {
+		if (transition instanceof LALR.DPDA.ReadTransition && exists table[transition.symbol()]) {
+		    ${ push table[transition.symbol()], [state, transition.to()] };
+		}
+	    }
+	}
+
+	return table;
+    }
+
+}
+}
