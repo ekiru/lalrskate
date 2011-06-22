@@ -11,6 +11,10 @@ class Transition {
 	}
 	return self.to;
     }
+
+    function is_hash_transition() {
+	return false;
+    }
 }
 
 }

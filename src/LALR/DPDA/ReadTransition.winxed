@@ -9,6 +9,11 @@ class ReadTransition : LALR.DPDA.Transition {
 	}
 	return self.symbol;
     }
+
+    function is_hash_transition() {
+	return substr(self.symbol, 0, length("__CFSM_HASH")) == "__CFSM_HASH";
+    }
+
 }
 
 }

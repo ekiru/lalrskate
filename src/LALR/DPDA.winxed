@@ -74,6 +74,30 @@ class DPDA {
 	return self.transitions[from];
     }
 
+    function is_state_adequate(string state) {
+	self.expect_state(state);
+	var transitions = self.transitions_from(state);
+	int total = transitions;
+	if (total == 1) {
+	    return 1;
+	} else {
+	    for (var transition in transitions) {
+		if (transition.is_hash_transition()) {
+		    return 0;
+		}
+	    }
+	}
+	return 1;
+    }
+
+    function is_adequate() {
+	int result = 1;
+	for (string state in self.states) {
+	    result &&= self.is_state_adequate(state);
+	}
+	return result;
+    }
+
 }
 
 }
