@@ -1,0 +1,33 @@
+namespace LALR {
+namespace Generator {
+
+    function build_p_state_sets(grammar, cfsm) {
+	using LALR.Generator.BuildCFSM.hash_state_for;
+
+	var sets = {};
+	var p_symbols = {};
+	for (string nonterminal in grammar.nonterminals()) {
+	    sets[nonterminal] = [];
+	    int i = 0;
+	    for (var production in grammar.rule(nonterminal)) {
+		sets[nonterminal][i] = {};
+		p_symbols[hash_state_for(nonterminal, i)] = [nonterminal, i];
+		i++;
+	    }
+	}
+
+	for (string state in cfsm.states()) {
+	    for (var transition in cfsm.transitions_from(state)) {
+		if (exists p_symbols[transition.to()]) {
+		    string nonterminal = p_symbols[transition.to()][0];
+		    int i = p_symbols[transition.to()][1];
+		    sets[nonterminal][i][state] = 1;
+		}
+	    }
+	}
+
+	return sets;
+    }
+
+}
+}

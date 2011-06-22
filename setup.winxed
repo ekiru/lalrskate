@@ -19,6 +19,8 @@ function main[main](argv) {
 	    "src/LALR/DPDA/ReduceTransition.pir"    : "src/LALR/DPDA/ReduceTransition.winxed",
 	    "src/LALR/DPDA/TopTransition.pir"       : "src/LALR/DPDA/TopTransition.winxed",
 	    "src/LALR/Generator/BuildCFSM.pir"      : "src/LALR/Generator/BuildCFSM.winxed",
+	    "src/LALR/Generator/BuildNonterminalTransitionTable.pir" : "src/LALR/Generator/BuildNonterminalTransitionTable.winxed",
+	    "src/LALR/Generator/BuildPStateSets.pir"      : "src/LALR/Generator/BuildPStateSets.winxed",
             "src/LALR/Grammar.pir"                  : "src/LALR/Grammar.winxed",
             "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
         },
@@ -30,6 +32,8 @@ function main[main](argv) {
 	    "src/LALR/DPDA/ReduceTransition.pbc"    : "src/LALR/DPDA/ReduceTransition.pir",
 	    "src/LALR/DPDA/TopTransition.pbc"       : "src/LALR/DPDA/TopTransition.pir",
 	    "src/LALR/Generator/BuildCFSM.pbc"      : "src/LALR/Generator/BuildCFSM.pir",
+	    "src/LALR/Generator/BuildNonterminalTransitionTable.pbc" : "src/LALR/Generator/BuildNonterminalTransitionTable.pir",
+	    "src/LALR/Generator/BuildPStateSets.pbc" : "src/LALR/Generator/BuildPStateSets.pir",
             "src/LALR/Grammar.pbc"                  : "src/LALR/Grammar.pir",
             "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
         },
@@ -42,6 +46,8 @@ function main[main](argv) {
 		"src/LALR/DPDA/ReduceTransition.pbc",
 		"src/LALR/DPDA/TopTransition.pbc",
 		"src/LALR/Generator/BuildCFSM.pbc",
+		"src/LALR/Generator/BuildNonterminalTransitionTable.pbc",
+		"src/LALR/Generator/BuildPStateSets.pbc",
                 "src/LALR/Grammar.pbc",
                 "src/LALR/Grammar/Prettyprint/BNF.pbc"
             ]
