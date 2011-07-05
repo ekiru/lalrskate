@@ -1,6 +1,10 @@
 namespace LALR {
 namespace Generator {
 
+    /* build_p_state_sets returns a hash of arrays of hashes mapping
+       nonterminals in the grammar and the production number for those
+       nonterminals to sets, represented as a hash, of states which
+       have #_transitions for each production. */
     function build_p_state_sets(grammar, cfsm) {
 	using LALR.Generator.BuildCFSM.hash_state_for;
 
