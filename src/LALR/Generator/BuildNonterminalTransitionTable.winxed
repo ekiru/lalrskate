@@ -1,7 +1,8 @@
 namespace LALR {
 namespace Generator {
 
-
+    /* build_nonterminal_transition_table returns a hash mapping each nonterminal A to an array of
+       pairs of states (N, M) where there is a transition under A from N to M. */
     function build_nonterminal_transition_table(grammar, cfsm) {
 	var table = {};
 	for (string nonterminal in grammar.nonterminals()) {
