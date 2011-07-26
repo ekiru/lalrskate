@@ -65,8 +65,6 @@ class DPDA {
 	self.expect_state(from);
 	self.expect_state(transition.to());
 	${ push self.transitions[from], transition };
-	string to = transition.to();
-	string symbol = transition.symbol();
     }
 
     function transitions_from(string from) {
