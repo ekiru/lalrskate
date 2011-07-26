@@ -4,11 +4,13 @@ namespace DPDA {
 class Interpreter {
     var dpda;
     var input;
+    var stack;
     var state;
     var error_occurred;
 
     function init[vtable]() {
 	self.input = [];
+	self.stack = [];
 	self.error_occurred = 0;
     }
 
@@ -46,6 +48,27 @@ class Interpreter {
 	    }
 	    self.error_occurred = 1;
 	    return;
+	} else if (transitions[0] instanceof LALR.DPDA.PushTransition) {
+	    if (transitions != 1) {
+		throw "Cannot have a push transition and another transition.";
+	    }
+	    ${ push self.stack, transitions[0].symbol() };
+	    self.state = transitions[0].to();
+	} else if (transitions[0] instanceof LALR.DPDA.TopTransition) {
+	    if (!self.stack) {
+		throw "Top transitions require a non-empty stack.";
+	    }
+	    var top = self.stack[elements(self.stack) - 1];
+	    for (var transition in transitions) {
+		if (!(transition instanceof LALR.DPDA.TopTransition)) {
+		    throw "Expected TopTransition.";
+		}
+		if (transition.expected() == top) {
+		    self.state = transition.to();
+		    return;
+		}
+	    }
+	    self.error_occurred = 1;
 	} else {
 	    throw "Unsupported transition type.";
 	}
