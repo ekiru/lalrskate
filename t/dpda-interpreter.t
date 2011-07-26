@@ -12,11 +12,17 @@ class InterpreterTest {
         var dpda = new LALR.DPDA;
         dpda.add_state("1");
         dpda.add_state("2");
+	dpda.add_state("3");
 	dpda.start("1");
         var transition = new LALR.DPDA.ReadTransition;
         transition.to("2");
         transition.symbol("a");
         dpda.add_transition_from("1", transition);
+	transition = new LALR.DPDA.ReadTransition;
+	transition.to("3");
+	transition.symbol("b");
+	dpda.add_transition_from("1", transition);
+	dpda.add_transition_from("2", transition);
         var interp = new LALR.DPDA.Interpreter;
         interp.BUILD(dpda:[named("dpda")]);
 
@@ -25,10 +31,15 @@ class InterpreterTest {
 	self.assert.equal("2", interp.state());
 	self.assert.is_false(interp.error_occurred());
 
+	interp.feed_input("b");
+	interp.perform_transition();
+	self.assert.equal("3", interp.state());
+	self.assert.is_false(interp.error_occurred());
+
 	interp = new LALR.DPDA.Interpreter;
 	interp.BUILD(dpda:[named("dpda")]);
 
-	interp.feed_input("b");
+	interp.feed_input("z");
 	interp.perform_transition();
 	self.assert.is_true(interp.error_occurred());
     }
