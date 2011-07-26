@@ -13,6 +13,7 @@ function main[main](argv) {
         "license_uri"       : "http://www.perlfoundation.org/artistic_license_2_0",
         "pir_winxed"        : {
 	    "src/LALR/DPDA.pir"                     : "src/LALR/DPDA.winxed",
+	    "src/LALR/DPDA/Interpreter.pir"         : "src/LALR/DPDA/Interpreter.winxed",
 	    "src/LALR/DPDA/Transition.pir"          : "src/LALR/DPDA/Transition.winxed",
 	    "src/LALR/DPDA/PushTransition.pir"      : "src/LALR/DPDA/PushTransition.winxed",
 	    "src/LALR/DPDA/ReadTransition.pir"      : "src/LALR/DPDA/ReadTransition.winxed",
@@ -26,6 +27,7 @@ function main[main](argv) {
         },
         "pbc_pir"           : {
 	    "src/LALR/DPDA.pbc"                     : "src/LALR/DPDA.pir",
+	    "src/LALR/DPDA/Interpreter.pbc"         : "src/LALR/DPDA/Interpreter.pir",
 	    "src/LALR/DPDA/Transition.pbc"          : "src/LALR/DPDA/Transition.pir",
 	    "src/LALR/DPDA/PushTransition.pbc"      : "src/LALR/DPDA/PushTransition.pir",
 	    "src/LALR/DPDA/ReadTransition.pbc"      : "src/LALR/DPDA/ReadTransition.pir",
@@ -40,6 +42,7 @@ function main[main](argv) {
         "pbc_pbc"           : {
             "lalr.pbc"          : [
 		"src/LALR/DPDA.pbc",
+		"src/LALR/DPDA/Interpreter.pbc",
 		"src/LALR/DPDA/Transition.pbc",
 		"src/LALR/DPDA/PushTransition.pbc",
 		"src/LALR/DPDA/ReadTransition.pbc",

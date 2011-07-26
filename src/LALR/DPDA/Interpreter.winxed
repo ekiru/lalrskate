@@ -1,0 +1,57 @@
+namespace LALR {
+namespace DPDA {
+
+class Interpreter {
+    var dpda;
+    var input;
+    var state;
+    var error_occurred;
+
+    function init[vtable]() {
+	self.input = [];
+	self.error_occurred = 0;
+    }
+
+    function BUILD(dpda[named]) {
+	self.dpda = dpda;
+	self.state = dpda.start();
+    }
+
+    function state() {
+	return self.state;
+    }
+
+    function error_occurred() {
+	return self.error_occurred;
+    }
+
+    function feed_input(string symbol) {
+	${ push self.input, symbol };
+    }
+
+    function perform_transition() {
+	var transitions = self.dpda.transitions_from(self.state);
+	if (transitions[0] instanceof LALR.DPDA.ReadTransition) {
+	    if (!self.input) {
+		throw "Unexpected end of input.";
+	    }
+	    for (var transition in transitions) {
+		if (!(transition instanceof LALR.DPDA.ReadTransition)) {
+		    throw "Expected a ReadTransition.";
+		}
+		if (transition.symbol() == self.input[0]) {
+		    self.state = transition.to();
+		    return;
+		}
+	    }
+	    self.error_occurred = 1;
+	    return;
+	} else {
+	    throw "Unsupported transition type.";
+	}
+    }
+
+}
+
+}
+}
