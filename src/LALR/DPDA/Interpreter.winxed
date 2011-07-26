@@ -43,6 +43,8 @@ class Interpreter {
 		}
 		if (transition.symbol() == self.input[0]) {
 		    self.state = transition.to();
+		    var ignore;
+		    ${ pop ignore, self.input };
 		    return;
 		}
 	    }
