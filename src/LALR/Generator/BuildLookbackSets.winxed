@@ -1,0 +1,66 @@
+namespace LALR {
+namespace Generator {
+
+    namespace BuildLookbackSets {
+
+	/* Tests whether there is a path in the CFSM from "from" to "to", spelling out the
+	   sequence of symbols in production. */
+	function has_path_spelling(cfsm, string from, string to, production) {
+	    string state = from;
+	    for (string symbol in production) {
+		int found = 0;
+		for (var transition in cfsm.transitions_from(state)) {
+		    if (transition instanceof LALR.DPDA.ReadTransition &&
+			transition.symbol() == symbol) {
+			found = 1;
+			state = transition.to();
+			break;
+		    }
+		}
+		if (!found)
+		    return 0;
+	    }
+
+	    return state == to;
+	}
+
+    }
+
+    /* build_lookback_sets returns a map from nonterminals and production numbers
+       to hashes mapping state names to lookback sets for that production. */
+    function build_lookback_sets(grammar, cfsm, ntt, p_state_sets) {
+	var sets = {};
+	for (string nonterm in grammar.nonterminals()) {
+	    sets[nonterm] = [];
+	    int i = 0;
+	    for (var production in grammar.rule(nonterm)) {
+		sets[nonterm][i] = {};
+		i++;
+	    }
+	}
+
+	for (string nonterm in grammar.nonterminals()) {
+	    int i = 0;	    
+	    for (var production in grammar.rule(nonterm)) {
+		for (string lookback_state in p_state_sets[nonterm][i]) {
+		    if (elements(p_state_sets[nonterm][i]) == 1) {
+			sets[nonterm][i][lookback_state] = clone(ntt[nonterm]);
+		    } else {
+			using LALR.Generator.BuildLookbackSets.has_path_spelling;
+			var subset = [];
+			for (var pair in ntt[nonterm]) {
+			    if (has_path_spelling(cfsm, pair[0], lookback_state, production))
+				${ push subset, pair };
+			}
+			sets[nonterm][i][lookback_state] = subset;
+		    }
+		}
+		i++;
+	    }
+
+	}
+	return sets;
+    }
+
+}
+}

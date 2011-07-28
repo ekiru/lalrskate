@@ -1,0 +1,52 @@
+namespace LALR {
+namespace Generator {
+
+    namespace AddLookback {
+	function anon_state() {
+	    int i = 0;
+	    NEXT:
+	    string s = i;
+	    yield "__ADD_LOOKBACK__" + s;
+	    i++;
+	    goto NEXT;
+	}
+    }
+
+    function add_lookback(grammar, cfsm, p_state_sets, lookback_sets) {
+	using LALR.Generator.AddLookback.anon_state;
+	using LALR.Generator.BuildCFSM.hash_state_for;
+	for (string nonterm in p_state_sets) {
+	    int i = 0;
+	    for (var set in p_state_sets[nonterm]) {
+		string hash_symbol = hash_state_for(nonterm, i);
+		string r_prime = anon_state();
+		cfsm.add_state(r_prime);
+		for (string state in set) {
+		    /* Transition to the lookback state. */
+		    var transitions = cfsm.transitions_from(state);
+		    for (int j = 0; j < elements(transitions); j++) {
+			var transition = transitions[j];
+			if (transition instanceof LALR.DPDA.ReadTransition && transition.symbol() == hash_symbol) {
+			    var transition = new LALR.DPDA.ReduceTransition;
+			    transition.pop_count(elements(grammar.rule(nonterm)[i]));
+			    transition.to(r_prime);
+			    transitions[j] = transition;
+			    break;
+			}
+		    }
+
+		    /* Add loobkack transitions. */
+		    for (var pair in lookback_sets[nonterm][i][state]) {
+			var transition = new LALR.DPDA.TopTransition;
+			transition.expected(pair[0]);
+			transition.to(pair[1]);
+			cfsm.add_transition_from(r_prime, transition);
+		    }
+		}
+		i++;
+	    }
+	}
+    } 
+
+}
+}
