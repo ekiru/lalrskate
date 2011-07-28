@@ -1,0 +1,100 @@
+namespace LALR {
+
+class Generator {
+    var grammar;
+    var cfsm;
+    var ntt;
+    var p_state_sets;
+    var lookback_sets;
+
+    function expect_grammar() {
+	if (self.grammar == null)
+	    throw "Grammar not set.";
+    }
+    function expect_cfsm() {
+	if (self.cfsm == null)
+	    throw "CFSM not set.";
+    }
+    function expect_ntt() {
+	if (self.ntt == null)
+	    throw "Nonterminal transition table not set.";
+    }
+    function expect_p_state_sets() {
+	if (self.p_state_sets == null)
+	    throw "P-state sets not set.";
+    }
+    function expect_lookback_sets() {
+	if (self.lookback_sets == null)
+	    throw "Lookback sets not set.";
+    }
+
+    function generate(grammar) {
+	self.grammar = grammar;
+	self.build_CFSM();
+	self.build_nonterminal_transition_table();
+	self.build_p_state_sets();
+	if (!self.cfsm.is_adequate()) {
+	    throw "Grammar is not LR(0).";
+	}
+	self.build_lookback_sets();
+	self.add_lookback();
+	self.delete_transitions_under_nonterminals();
+	self.eliminate_epsilon_transitions();
+
+	return self.cfsm;
+    }
+
+    function build_CFSM() {
+	using LALR.Generator.build_CFSM;
+	self.expect_grammar();
+	self.cfsm = build_CFSM(self.grammar);
+    }
+
+    function build_nonterminal_transition_table() {
+	using LALR.Generator.build_nonterminal_transition_table;
+	self.expect_grammar();
+	self.expect_cfsm();
+	self.ntt = build_nonterminal_transition_table(self.grammar, self.cfsm);
+    }
+
+    function build_p_state_sets() {
+	using LALR.Generator.build_p_state_sets;
+	self.expect_grammar();
+	self.expect_cfsm();
+	self.p_state_sets = build_p_state_sets(self.grammar, self.cfsm);
+    }
+
+    function build_lookback_sets() {
+	using LALR.Generator.build_lookback_sets;
+	self.expect_grammar();
+	self.expect_cfsm();
+	self.expect_ntt();
+	self.expect_p_state_sets();
+	self.lookback_sets = build_lookback_sets(self.grammar, self.cfsm, self.ntt, self.p_state_sets);
+    }
+
+    function add_lookback() {
+	using LALR.Generator.add_lookback;
+	self.expect_grammar();
+	self.expect_cfsm();
+	self.expect_ntt();
+	self.expect_p_state_sets();
+	self.expect_lookback_sets();
+	add_lookback(self.grammar, self.cfsm, self.p_state_sets, self.lookback_sets);
+    }
+
+    function delete_transitions_under_nonterminals() {
+	using LALR.Generator.delete_transitions_under_nonterminals;
+	self.expect_grammar();
+	self.expect_cfsm();
+	delete_transitions_under_nonterminals(self.grammar, self.cfsm);
+    }
+
+    function eliminate_epsilon_transitions() {
+	using LALR.Generator.eliminate_epsilon_transitions;
+	self.expect_cfsm();
+	eliminate_epsilon_transitions(self.cfsm);
+    }
+}
+
+}
