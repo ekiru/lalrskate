@@ -1,7 +1,20 @@
 namespace LALR {
 namespace Generator {
 
-    function eliminate_epsilon_transitions() {
+    function eliminate_epsilon_transitions(dpda) {
+	using LALR.DPDA.EPSILON;
+	for (string state in dpda.states()) {
+	    var transitions = dpda.transitions_from(state);
+	    for (int i = 0; i < elements(transitions); i++) {
+		if (transitions[i] instanceof LALR.DPDA.ReadTransition && string(transitions[i].symbol()) == EPSILON()) {
+		    string to = transitions[i].to();
+		    delete transitions[i];
+		    for (var transition in dpda.transitions_from(to)) {
+			dpda.add_transition_from(state, transition);
+		    }
+		}
+	    }
+	}
 	
     }
 
