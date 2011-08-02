@@ -31,6 +31,7 @@ class Generator {
     function generate(grammar) {
 	self.grammar = grammar;
 	self.build_CFSM();
+	self.eliminate_epsilon_transitions();
 	self.build_nonterminal_transition_table();
 	self.build_p_state_sets();
 	if (!self.cfsm.is_adequate()) {
@@ -39,7 +40,6 @@ class Generator {
 	self.build_lookback_sets();
 	self.add_lookback();
 	self.delete_transitions_under_nonterminals();
-	self.eliminate_epsilon_transitions();
 
 	return self.cfsm;
     }
