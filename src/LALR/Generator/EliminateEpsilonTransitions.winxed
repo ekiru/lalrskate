@@ -1,0 +1,10 @@
+namespace LALR {
+namespace Generator {
+
+    function eliminate_epsilon_transitions() {
+	
+    }
+
+
+}
+}

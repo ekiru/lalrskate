@@ -25,6 +25,7 @@ function main[main](argv) {
 	    "src/LALR/Generator/BuildLookbackSets.pir" : "src/LALR/Generator/BuildLookbackSets.winxed",
 	    "src/LALR/Generator/BuildNonterminalTransitionTable.pir" : "src/LALR/Generator/BuildNonterminalTransitionTable.winxed",
 	    "src/LALR/Generator/BuildPStateSets.pir"      : "src/LALR/Generator/BuildPStateSets.winxed",
+	    "src/LALR/Generator/EliminateEpsilonTransitions.pir"     : "src/LALR/Generator/EliminateEpsilonTransitions.winxed",
             "src/LALR/Grammar.pir"                  : "src/LALR/Grammar.winxed",
             "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
         },
@@ -42,6 +43,7 @@ function main[main](argv) {
 	    "src/LALR/Generator/BuildLookbackSets.pbc" : "src/LALR/Generator/BuildLookbackSets.pir",
 	    "src/LALR/Generator/BuildNonterminalTransitionTable.pbc" : "src/LALR/Generator/BuildNonterminalTransitionTable.pir",
 	    "src/LALR/Generator/BuildPStateSets.pbc" : "src/LALR/Generator/BuildPStateSets.pir",
+	    "src/LALR/Generator/EliminateEpsilonTransitions.pbc"     : "src/LALR/Generator/EliminateEpsilonTransitions.pir",
             "src/LALR/Grammar.pbc"                  : "src/LALR/Grammar.pir",
             "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
         },
@@ -60,6 +62,7 @@ function main[main](argv) {
 		"src/LALR/Generator/BuildLookbackSets.pbc",
 		"src/LALR/Generator/BuildNonterminalTransitionTable.pbc",
 		"src/LALR/Generator/BuildPStateSets.pbc",
+		"src/LALR/Generator/EliminateEpsilonTransitions.pbc",
                 "src/LALR/Grammar.pbc",
                 "src/LALR/Grammar/Prettyprint/BNF.pbc"
             ]
