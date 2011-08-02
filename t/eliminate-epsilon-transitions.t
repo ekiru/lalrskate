@@ -57,7 +57,7 @@ class EpsilonEliminationTest {
 	eliminate_epsilon_transitions(dpda);
 
 	var transitions = dpda.transitions_from("2");
-	self.assert.is_equal(2, elements(transitions));
+	self.assert.equal(2, elements(transitions));
 	var T_trans;
 	var a_trans;
 	for (transition in transitions) {
