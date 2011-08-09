@@ -61,6 +61,10 @@ class DPDA {
 	return exists self.states[name];
     }
 
+    function make_state_push(string name) {
+	self.push_states[name] = 1;
+    }
+
     function is_pushing_state(string name) {
 	return exists self.push_states[name];
     }

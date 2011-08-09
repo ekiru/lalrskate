@@ -38,10 +38,12 @@ namespace Generator {
 
 	for (string nonterminal in grammar.nonterminals()) {
 	    string base_state = cfsm_state_for(nonterminal);
-	    cfsm.add_state_if_not_present(base_state, 1:[named("pushing")]);
-	    int production_count = 0;
-	    for (var production in grammar.rule(nonterminal)) {
-		string hash_state = hash_state_for(nonterminal, production_count++);
+	    cfsm.add_state_if_not_present(base_state);
+	    cfsm.make_state_push(base_state);
+	    var productions = grammar.rule(nonterminal);
+	    for (int production_count = 0; production_count < elements(productions); production_count++) {
+		var production = productions[production_count];
+		string hash_state = hash_state_for(nonterminal, production_count);
 		string state = base_state;
 		for (string symbol in production) {
 		    if (grammar.is_terminal(symbol)) {
@@ -80,8 +82,6 @@ namespace Generator {
 		hash_transition.symbol(hash_state);
 		hash_transition.to(hash_state);
 		cfsm.add_transition_from(state, hash_transition);
-
-		production_count++;
 	    }
 	}
 

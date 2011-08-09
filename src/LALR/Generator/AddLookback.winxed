@@ -16,8 +16,8 @@ namespace Generator {
 	using LALR.Generator.AddLookback.anon_state;
 	using LALR.Generator.BuildCFSM.hash_state_for;
 	for (string nonterm in p_state_sets) {
-	    int i = 0;
-	    for (var set in p_state_sets[nonterm]) {
+	    for (int i = 0; i < elements(p_state_sets[nonterm]); i++) {
+		var set = p_state_sets[nonterm][i];
 		string hash_symbol = hash_state_for(nonterm, i);
 		string r_prime = anon_state();
 		cfsm.add_state(r_prime);
@@ -43,7 +43,6 @@ namespace Generator {
 			cfsm.add_transition_from(r_prime, transition);
 		    }
 		}
-		i++;
 	    }
 	}
     } 
