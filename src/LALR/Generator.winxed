@@ -97,10 +97,10 @@ class Generator {
 	eliminate_epsilon_transitions(self.cfsm);
     }
 
-    function explicity_push_states() {
-	using LALR.Generator.explicitly_push_transitions;
+    function explicitly_push_states() {
+	using LALR.Generator.explicitly_push_states;
 	self.expect_cfsm();
-	explicitly_push_transitions(self.cfsm);
+	explicitly_push_states(self.cfsm);
     }
 }
 
