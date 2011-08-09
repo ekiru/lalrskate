@@ -40,6 +40,7 @@ class Generator {
 	self.build_lookback_sets();
 	self.add_lookback();
 	self.delete_transitions_under_nonterminals();
+	self.explicitly_push_states();
 
 	return self.cfsm;
     }
@@ -94,6 +95,12 @@ class Generator {
 	using LALR.Generator.eliminate_epsilon_transitions;
 	self.expect_cfsm();
 	eliminate_epsilon_transitions(self.cfsm);
+    }
+
+    function explicity_push_states() {
+	using LALR.Generator.explicitly_push_transitions;
+	self.expect_cfsm();
+	explicitly_push_transitions(self.cfsm);
     }
 }
 
