@@ -38,7 +38,7 @@ namespace Generator {
 
 	for (string nonterminal in grammar.nonterminals()) {
 	    string base_state = cfsm_state_for(nonterminal);
-	    cfsm.add_state_if_not_present(base_state);
+	    cfsm.add_state_if_not_present(base_state, 1:[named("pushing")]);
 	    int production_count = 0;
 	    for (var production in grammar.rule(nonterminal)) {
 		string hash_state = hash_state_for(nonterminal, production_count++);

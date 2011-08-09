@@ -12,12 +12,14 @@ class DPDA {
     var input;
     var stack;
     var states;
+    var push_states;
     var transitions;
     var start;
 
     function init[vtable]() {
 	self.stack = [];
 	self.states = {};
+	self.push_states = {};
 	self.transitions = {};
     }
 
@@ -41,18 +43,26 @@ class DPDA {
 	return result;
     }
 
-    function add_state(string name) {
+    function add_state(string name, int pushing[optional, named("pushing")], int has_pushing[opt_flag]) {
 	self.states[name] = 1;
+	if (has_pushing && pushing)
+	    self.push_states[name] = 1;
 	self.transitions[name] = [];
     }
 
-    function add_state_if_not_present(string name) {
+    function add_state_if_not_present(string name, int pushing[optional, named("pushing")], int has_pushing[opt_flag]) {
+	if (!has_pushing)
+	    pushing = 0;
 	if (!self.is_state(name))
-	    self.add_state(name);
+	    self.add_state(name, pushing);
     }
 
     function is_state(string name) {
 	return exists self.states[name];
+    }
+
+    function is_pushing_state(string name) {
+	return exists self.push_states[name];
     }
 
     function expect_state(string name) {
