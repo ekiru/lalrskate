@@ -1,0 +1,36 @@
+namespace LALR {
+namespace Generator {
+
+    namespace ExplicitlyPushStates {
+	function anon_state() {
+	    int id = 0;
+	    NEXT:
+	    string sid = id;
+	    id++;
+	    yield "__PUSH_ANON__" + id;
+	    goto NEXT;
+	}
+    }
+
+    function explicitly_push_states(dpda) {
+	using LALR.Generator.ExplicitlyPushStates.anon_state;
+	for (string state in dpda.states()) {
+	    if (dpda.is_pushing_state(state)) {
+		string new_state = anon_state();
+		dpda.add_state(new_state);
+		var transitions = dpda.transitions_from(state);
+		while (elements(transitions)) {
+		    var transition;
+		    ${ shift transition, transitions };
+		    dpda.add_transition_from(new_state, transition);
+		}
+		var push = new LALR.DPDA.PushTransition;
+		push.symbol(state);
+		push.to(new_state);
+		dpda.add_transition_from(state, push);
+	    }
+	}
+    }
+
+}
+}
