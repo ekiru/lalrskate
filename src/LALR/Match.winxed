@@ -4,7 +4,9 @@ class Match {
 
     var ast;
 
-    function ast() {
+    function ast(ast[optional], int has_ast[opt_flag]) {
+	if (has_ast)
+	    self.ast = ast;
 	return self.ast;
     }
 
