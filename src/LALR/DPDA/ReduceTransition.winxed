@@ -3,6 +3,9 @@ namespace DPDA {
 
 class ReduceTransition : LALR.DPDA.Transition {
     var pop_count;
+    var production_name;
+    var production_number;
+
     function pop_count(int count[optional], int has_count[opt_flag]) {
 	if (has_count) {
 	    self.pop_count = count;
@@ -10,13 +13,20 @@ class ReduceTransition : LALR.DPDA.Transition {
 	return self.pop_count;
     }
 
-    var output;
-    function output(var output[optional], int has_output[opt_flag]) {
-	if (has_output) {
-	    self.output = output;
+    function production_name(string name[optional], int has_name[opt_flag]) {
+	if (has_name) {
+	    self.production_name = name;
 	}
-	return self.output;
+	return self.production_name;
     }
+
+    function production_number(int number[optional], int has_number[opt_flag]) {
+	if (has_number) {
+	    self.production_number = number;
+	}
+	return self.production_number;
+    }
+
 }
 
 }
