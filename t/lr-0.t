@@ -61,5 +61,11 @@ class LR0Test {
 
 	match = parse(dpda, ["b", "d"], actions:[named("actions")]);
 	self.assert.equal("(nt S 0 (nt E 1 (t b) (nt B 1 (t d))))", match.ast());
+
+	match = parse(dpda, ["a", "c", "d"], actions:[named("actions")]);
+	self.assert.equal("(nt S 0 (nt E 0 (t a) (nt A 0 (t c) (nt A 1 (t d)))))", match.ast());
+
+	match = parse(dpda, ["b", "c", "d"], actions:[named("actions")]);
+	self.assert.equal("(nt S 0 (nt E 1 (t b) (nt B 0 (t c) (nt B 1 (t d)))))", match.ast());
     }
 }
