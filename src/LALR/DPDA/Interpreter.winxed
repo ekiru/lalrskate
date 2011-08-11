@@ -1,6 +1,16 @@
 namespace LALR {
 namespace DPDA {
 
+namespace Interpreter {
+
+    function parse(dpda, input, actions[named, optional], int has_actions[opt_flag]) {
+	var interp = new LALR.DPDA.Interpreter;
+	interp.BUILD(dpda:[named("dpda")], actions:[named("actions")]);
+	return interp.parse(input);
+    }
+
+}
+
 class Interpreter {
     var dpda;
     var input;

@@ -50,13 +50,13 @@ class StringActions {
 
 class LR0Test {
     function test_g_0() {
+	using LALR.DPDA.Interpreter.parse;
 	var dpda = g_0();
 	var actions = new StringActions;
 
 	var interp = new LALR.DPDA.Interpreter;
-	interp.BUILD(dpda:[named("dpda")], actions:[named("actions")]);
 
-	var match = interp.parse(["a", "d"]);
+	var match = parse(dpda, ["a", "d"], actions:[named("actions")]);
 	self.assert.equal("(nt S 0 (nt E 0 (t a) (nt A 1 (t d))))", match.ast());
     }
 }
