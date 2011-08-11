@@ -39,7 +39,6 @@ namespace Generator {
 	for (string nonterminal in grammar.nonterminals()) {
 	    string base_state = cfsm_state_for(nonterminal);
 	    cfsm.add_state_if_not_present(base_state);
-	    cfsm.make_state_push(base_state);
 	    var productions = grammar.rule(nonterminal);
 	    for (int production_count = 0; production_count < elements(productions); production_count++) {
 		var production = productions[production_count];
@@ -76,6 +75,7 @@ namespace Generator {
 			cfsm.add_transition_from(state, continuation);
 			state = continuation_state;
 		    }
+		    cfsm.make_state_push(state);
 		}
 		var hash_transition = new LALR.DPDA.ReadTransition;
 		cfsm.add_state_if_not_present(hash_state);
