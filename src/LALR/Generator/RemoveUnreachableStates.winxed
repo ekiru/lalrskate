@@ -1,0 +1,25 @@
+namespace LALR {
+namespace Generator {
+
+    function remove_unreachable_states(cfsm) {
+	var reachable = {};
+	var stack = [ cfsm.start() ];
+	while (stack) {
+	    if (!exists reachable[stack[0]]) {
+		for (var transition in cfsm.transitions_from(stack[0])) {
+		    ${ push stack, transition.to() };
+		}
+		reachable[stack[0]] = 1;
+	    }
+	    delete stack[0];
+	}
+
+	for (string state in cfsm.states()) {
+	    if (!exists reachable[state]) {
+		cfsm.remove_state(state);
+	    }
+	}
+    }
+
+}
+}
