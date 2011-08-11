@@ -29,18 +29,24 @@ namespace Generator {
 			if (transition instanceof LALR.DPDA.ReadTransition && transition.symbol() == hash_symbol) {
 			    var transition = new LALR.DPDA.ReduceTransition;
 			    transition.pop_count(elements(grammar.rule(nonterm)[i]));
+			    transition.production_name(nonterm);
+			    transition.production_number(i);
 			    transition.to(r_prime);
 			    transitions[j] = transition;
 			    break;
 			}
 		    }
 
-		    /* Add loobkack transitions. */
-		    for (var pair in lookback_sets[nonterm][i][state]) {
-			var transition = new LALR.DPDA.TopTransition;
-			transition.expected(pair[0]);
-			transition.to(pair[1]);
-			cfsm.add_transition_from(r_prime, transition);
+		    if (nonterm == grammar.start()) {
+			cfsm.make_state_succeed(r_prime);
+		    } else {
+			/* Add lookback transitions. */
+			for (var pair in lookback_sets[nonterm][i][state]) {
+			    var transition = new LALR.DPDA.TopTransition;
+			    transition.expected(pair[0]);
+			    transition.to(pair[1]);
+			    cfsm.add_transition_from(r_prime, transition);
+			}
 		    }
 		}
 	    }
