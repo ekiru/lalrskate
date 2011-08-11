@@ -1,0 +1,36 @@
+namespace LALR {
+namespace Match {
+
+class Nonterminal : LALR.Match {
+
+    var name;
+    var number;
+    var children;
+
+    function init[vtable]() {
+	self.children = [];
+    }
+
+    function children(children[optional], int has_children[opt_flag]) {
+	if (has_children)
+	    self.children = children;
+	return self.children;
+    }
+
+    function name(string name[optional], int has_name[opt_flag]) {
+	if (has_name)
+	    self.name = name;
+	return self.name;
+    }
+
+    function number(int number[optional], int has_number[opt_flag]) {
+	if (has_number)
+	    self.number = number;
+	return self.number;
+    }
+
+}
+
+
+}
+}

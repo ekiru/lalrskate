@@ -1,0 +1,16 @@
+namespace LALR {
+namespace Match {
+
+class Terminal : LALR.Match {
+    var terminal;
+
+    function terminal(terminal[optional], int has_terminal[opt_flag]) {
+	if (has_terminal)
+	    self.terminal = terminal;
+
+	return self.terminal;
+    }
+}
+
+}
+}

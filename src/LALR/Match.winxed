@@ -1,0 +1,13 @@
+namespace LALR {
+
+class Match {
+
+    var ast;
+
+    function ast() {
+	return self.ast;
+    }
+
+}
+
+}
