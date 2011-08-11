@@ -28,8 +28,12 @@ function main[main](argv) {
 	    "src/LALR/Generator/DeleteTransitionsUnderNonterminals.pir"      : "src/LALR/Generator/DeleteTransitionsUnderNonterminals.winxed",
 	    "src/LALR/Generator/EliminateEpsilonTransitions.pir"     : "src/LALR/Generator/EliminateEpsilonTransitions.winxed",
 	    "src/LALR/Generator/ExplicitlyPushStates.pir" : "src/LALR/Generator/ExplicitlyPushStates.winxed",
+	    "src/LALR/Generator/RemoveUnreachableStates.pir"         : "src/LALR/Generator/RemoveUnreachableStates.winxed",
             "src/LALR/Grammar.pir"                  : "src/LALR/Grammar.winxed",
-            "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed"
+            "src/LALR/Grammar/Prettyprint/BNF.pir"  : "src/LALR/Grammar/Prettyprint/BNF.winxed",
+	    "src/LALR/Match.pir"                    : "src/LALR/Match.winxed",
+	    "src/LALR/Match/Nonterminal.pir"        : "src/LALR/Match/Nonterminal.winxed",
+	    "src/LALR/Match/Terminal.pir"           : "src/LALR/Match/Terminal.winxed"
         },
         "pbc_pir"           : {
 	    "src/LALR/DPDA.pbc"                     : "src/LALR/DPDA.pir",
@@ -48,8 +52,12 @@ function main[main](argv) {
 	    "src/LALR/Generator/DeleteTransitionsUnderNonterminals.pbc"      : "src/LALR/Generator/DeleteTransitionsUnderNonterminals.pir",
 	    "src/LALR/Generator/EliminateEpsilonTransitions.pbc"     : "src/LALR/Generator/EliminateEpsilonTransitions.pir",
 	    "src/LALR/Generator/ExplicitlyPushStates.pbc" : "src/LALR/Generator/ExplicitlyPushStates.pir",
+	    "src/LALR/Generator/RemoveUnreachableStates.pbc"         : "src/LALR/Generator/RemoveUnreachableStates.pir",
             "src/LALR/Grammar.pbc"                  : "src/LALR/Grammar.pir",
-            "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir"
+            "src/LALR/Grammar/Prettyprint/BNF.pbc"  : "src/LALR/Grammar/Prettyprint/BNF.pir",
+	    "src/LALR/Match.pbc"                    : "src/LALR/Match.pir",
+	    "src/LALR/Match/Nonterminal.pbc"        : "src/LALR/Match/Nonterminal.pir",
+	    "src/LALR/Match/Terminal.pbc"           : "src/LALR/Match/Terminal.pir"
         },
         "pbc_pbc"           : {
             "lalr.pbc"          : [
@@ -69,8 +77,12 @@ function main[main](argv) {
 		"src/LALR/Generator/DeleteTransitionsUnderNonterminals.pbc",
 		"src/LALR/Generator/EliminateEpsilonTransitions.pbc",
 		"src/LALR/Generator/ExplicitlyPushStates.pbc",
+		"src/LALR/Generator/RemoveUnreachableStates.pbc",
                 "src/LALR/Grammar.pbc",
-                "src/LALR/Grammar/Prettyprint/BNF.pbc"
+                "src/LALR/Grammar/Prettyprint/BNF.pbc",
+		"src/LALR/Match.pbc",
+		"src/LALR/Match/Nonterminal.pbc",
+		"src/LALR/Match/Terminal.pbc"
             ]
         },
         "inst_lib"          : [
