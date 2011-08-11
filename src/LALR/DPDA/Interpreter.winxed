@@ -4,19 +4,43 @@ namespace DPDA {
 class Interpreter {
     var dpda;
     var input;
+    var match_stack;
     var stack;
     var state;
     var error_occurred;
 
+    var actions;
+
     function init[vtable]() {
 	self.input = [];
+	self.match_stack = [];
 	self.stack = [];
 	self.error_occurred = 0;
     }
 
-    function BUILD(dpda[named]) {
+    function BUILD(dpda[named], actions[named, optional], int has_actions[opt_flag]) {
 	self.dpda = dpda;
 	self.state = dpda.start();
+
+	if (has_actions) {
+	    self.actions = actions;
+	}
+    }
+
+    function parse(input[optional], int has_input[opt_flag]) {
+	if (input != null) {
+	    self.input = input;
+	}
+	${ unshift self.input, "__LALR_GENERATOR__BEGIN" };
+	${ push self.input, "__LALR_GENERATOR__END" };
+	while (!self.dpda.is_successful_state(self.state) && !self.error_occurred) {
+	    self.perform_transition();
+	}
+	if (self.error_occurred) {
+	    throw "Parse error.";
+	} else {
+	    return self.match_stack[0].children[1];
+	}
     }
 
     function state() {
@@ -33,7 +57,12 @@ class Interpreter {
 
     function perform_transition() {
 	var transitions = self.dpda.transitions_from(self.state);
+	if (transitions == 0) {
+	    throw "No transitions possible from state " + string(self.state) + ".";
+	}
 	if (transitions[0] instanceof LALR.DPDA.ReadTransition) {
+	    int has_epsilon_transition;
+	    string epsilon_destination;
 	    if (!self.input) {
 		throw "Unexpected end of input.";
 	    }
@@ -41,10 +70,14 @@ class Interpreter {
 		if (!(transition instanceof LALR.DPDA.ReadTransition)) {
 		    throw "Expected a ReadTransition.";
 		}
+
 		if (transition.symbol() == self.input[0]) {
 		    self.state = transition.to();
-		    var ignore;
-		    ${ pop ignore, self.input };
+		    var terminal;
+		    ${ shift terminal, self.input };
+		    var match = self.match_for_terminal(terminal);
+		    self.perform_action_for_terminal(match);
+		    ${ push self.match_stack, match };
 		    return;
 		}
 	    }
@@ -71,9 +104,57 @@ class Interpreter {
 		}
 	    }
 	    self.error_occurred = 1;
+	} else if (transitions[0] instanceof LALR.DPDA.ReduceTransition) {
+	    if (transitions != 1) {
+		throw "Cannot have a reduce transition and another transition.";
+	    }
+	    var transition = transitions[0];
+	    var children = [];
+	    while (elements(children) < transition.pop_count()) {
+		var child;
+		var ignore;
+		${ pop ignore, self.stack };
+		${ pop child, self.match_stack };
+		${ unshift children, child };
+	    }
+
+	    var match = self.match_for_nonterminal(transition.production_name(), transition.production_number(), children);
+	    self.perform_action_for_nonterminal(match);
+	    ${ push self.match_stack, match };
+	    self.state = transition.to();
 	} else {
 	    throw "Unsupported transition type.";
 	}
+    }
+
+    function match_for_terminal(t) {
+	var match = new LALR.Match.Terminal;
+	match.terminal(t);
+
+	return match;
+    }
+
+    function match_for_nonterminal(name, number, children) {
+	var match = new LALR.Match.Nonterminal;
+	match.name(name);
+	match.number(number);
+	match.children(children);
+
+	return match;
+    }
+
+    function perform_action_for_terminal(match) {
+	if (self.actions == null)
+	    return;
+
+	self.actions.terminal_action(match.terminal(), match);
+    }
+
+    function perform_action_for_nonterminal(match) {
+	if (self.actions == null)
+	    return;
+
+	self.actions.nonterminal_action(match.name(), match.number(), match);
     }
 
 }
