@@ -30,6 +30,7 @@ class Generator {
 
     function generate(grammar) {
 	self.grammar = grammar;
+	self.add_start_and_end();
 	self.build_CFSM();
 	self.eliminate_epsilon_transitions();
 	self.build_nonterminal_transition_table();
@@ -41,8 +42,15 @@ class Generator {
 	self.add_lookback();
 	self.delete_transitions_under_nonterminals();
 	self.explicitly_push_states();
+	self.remove_unreachable_states();
 
 	return self.cfsm;
+    }
+
+    function add_start_and_end() {
+	using LALR.Generator.add_start_and_end;
+	self.expect_grammar();
+	add_start_and_end(self.grammar);
     }
 
     function build_CFSM() {
@@ -101,6 +109,12 @@ class Generator {
 	using LALR.Generator.explicitly_push_states;
 	self.expect_cfsm();
 	explicitly_push_states(self.cfsm);
+    }
+
+    function remove_unreachable_states() {
+	using LALR.Generator.remove_unreachable_states;
+	self.expect_cfsm();
+	remove_unreachable_states(self.cfsm);
     }
 }
 

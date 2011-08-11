@@ -1,0 +1,16 @@
+namespace LALR {
+namespace Generator {
+
+    function add_start_and_end(grammar) {
+	grammar.add_terminal("__LALR_GENERATOR__BEGIN");
+	grammar.add_terminal("__LALR_GENERATOR__END");
+	grammar.add_nonterminal("__LALR_GENERATOR__START");
+	grammar.add_rule("__LALR_GENERATOR__START",
+			 "__LALR_GENERATOR__BEGIN",
+			 grammar.start(),
+			 "__LALR_GENERATOR__END");
+	grammar.start("__LALR_GENERATOR__START");
+    }
+
+}
+}
