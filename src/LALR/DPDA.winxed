@@ -13,6 +13,7 @@ class DPDA {
     var stack;
     var states;
     var push_states;
+    var success_states;
     var transitions;
     var start;
 
@@ -20,6 +21,7 @@ class DPDA {
 	self.stack = [];
 	self.states = {};
 	self.push_states = {};
+	self.success_states = {};
 	self.transitions = {};
     }
 
@@ -57,6 +59,13 @@ class DPDA {
 	    self.add_state(name, pushing);
     }
 
+    function remove_state(string name) {
+	delete self.states[name];
+	delete self.push_states[name];
+	delete self.success_states[name];
+	delete self.transitions[name];
+    }
+
     function is_state(string name) {
 	return exists self.states[name];
     }
@@ -67,6 +76,14 @@ class DPDA {
 
     function is_pushing_state(string name) {
 	return exists self.push_states[name];
+    }
+
+    function is_successful_state(string name) {
+	return exists self.success_states[name];
+    }
+
+    function make_state_succeed(string name) {
+	self.success_states[name] = 1;
     }
 
     function expect_state(string name) {
