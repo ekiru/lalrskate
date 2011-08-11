@@ -58,5 +58,8 @@ class LR0Test {
 
 	var match = parse(dpda, ["a", "d"], actions:[named("actions")]);
 	self.assert.equal("(nt S 0 (nt E 0 (t a) (nt A 1 (t d))))", match.ast());
+
+	match = parse(dpda, ["b", "d"], actions:[named("actions")]);
+	self.assert.equal("(nt S 0 (nt E 1 (t b) (nt B 1 (t d))))", match.ast());
     }
 }
