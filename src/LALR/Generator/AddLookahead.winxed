@@ -1,12 +1,22 @@
 namespace LALR {
 namespace Generator {
 
+    namespace AddLookahead {
+	function anon_state() {
+	    int i = 0;
+	    again:
+	    yield "__add_lookahead__ANON__" + string(i);
+	    i++;
+	    goto again;
+	}
+    }
+
     function add_lookahead(grammar, cfsm) {
+	using LALR.Generator.AddLookahead.anon_state;
 	for (string state in cfsm.states()) {
 	    if (cfsm.is_state_adequate(state))
 		continue;
 
-	    say("looking at state " + state);
 	    var transitions = cfsm.transitions_from(state);
 	    for (int i = 0; i < elements(transitions); i++) {
 		string new_state = anon_state();
@@ -14,7 +24,7 @@ namespace Generator {
 		cfsm.add_transition_from(new_state, transitions[i]);
 		var transition = new LALR.DPDA.LookaheadTransition;
 		transition.to(new_state);
-		transition.set(transitions[i].lookahead_set());
+		transition.lookahead_set(transitions[i].lookahead_set());
 		transitions[i] = transition;
 	    }
 	}
