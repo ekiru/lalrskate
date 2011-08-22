@@ -25,7 +25,6 @@ namespace Generator {
 				j++;
 			    }
 			    if (j == elements(production)) {
-				say(sets[1][nonterm] == null);
 				for (string symbol in sets[1][nonterm]) {
 				    if (!exists sets[1][A][symbol]) {
 					changed = 1;
