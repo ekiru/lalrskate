@@ -14,15 +14,17 @@ namespace Generator {
 		if (transitions[i] instanceof LALR.DPDA.ReadTransition && string(transitions[i].symbol()) == EPSILON()) {
 		    string to = transitions[i].to();
 		    delete transitions[i];
-		    var state_stack = [to];
+		    var state_stack = [ [ state, dpda.transitions_from(to) ] ];
 		    while (state_stack) {
-			string eps_state;
-			${ pop eps_state, state_stack };
-			for (var transition in dpda.transitions_from(eps_state)) {
+			var tuple;
+			${ pop tuple, state_stack };
+			string dest_state = tuple[0];
+			var transitions = tuple[1];
+			for (var transition in transitions) {
 			    if (transition instanceof LALR.DPDA.ReadTransitions && string(transition.symbol()) == EPSILON()) {
-				${ push state_stack, transition.to() };
+				${ push state_stack, [ dest_state, dpda.transitions_from(transition.to()) ] };
 			    } else {
-				dpda.add_transition_from(state, transition);
+				dpda.add_transition_from(dest_state, transition);
 			    }
 			}
 		    }
