@@ -50,6 +50,8 @@ class Generator {
 	self.build_nonterminal_transition_table();
 	self.build_p_state_sets();
 	if (!self.cfsm.is_adequate()) {
+	    self.build_first_sets();
+	    self.build_follows_sets();
 	    self.build_simple_1_lookahead_sets();
 	}
 	if (!self.is_slr1()) {
