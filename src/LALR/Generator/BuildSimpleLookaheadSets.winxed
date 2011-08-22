@@ -21,7 +21,7 @@ namespace Generator {
 	    for (var transition in cfsm.transitions_from(state)) {
 		var set = {};
 		if (transition.is_hash_transition()) {
-		    string nonterm = 
+		    string nonterm = hash_symbols[transition.symbol()];
 		    set = clone(follows[1][nonterm]);
 		} else {
 		    set[transition.symbol()] = 1;
