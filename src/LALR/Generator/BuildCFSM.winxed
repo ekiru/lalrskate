@@ -45,8 +45,25 @@ namespace Generator {
 		string hash_state = hash_state_for(nonterminal, production_count);
 		string state = base_state;
 		for (string symbol in production) {
-		    if (grammar.is_terminal(symbol)) {
-			// In this case, we read the nonterminal and move on.
+		    if (grammar.is_nonterminal(symbol)) {
+			string nonterminal_state = cfsm_state_for(symbol);
+			cfsm.add_state_if_not_present(nonterminal_state);
+			var to_nonterminal = new LALR.DPDA.ReadTransition;
+			to_nonterminal.to(nonterminal_state);
+			to_nonterminal.symbol(EPSILON());
+			cfsm.add_transition_from(state, to_nonterminal);
+		    }
+
+		    int already_has_transition_under = 0;
+		    string existing_state;
+		    for (var transition in cfsm.transitions_from(state)) {
+			if (transition.symbol() == symbol) {
+			    already_has_transition_under = 1;
+			    existing_state = transition.to();
+			    break;
+			}
+		    }
+		    if (!already_has_transition_under) {
 			string new_state = anon_state();
 			cfsm.add_state_if_not_present(new_state);
 			var read = new LALR.DPDA.ReadTransition;
@@ -57,23 +74,7 @@ namespace Generator {
 			cfsm.add_transition_from(state, read);
 			state = new_state;
 		    } else {
-			// Here, we have to create two new states, one
-			// which continues onward, and one which goes to
-			// the CFSM state for the nonterminal.
-			string nonterminal_state = cfsm_state_for(symbol);
-			cfsm.add_state_if_not_present(nonterminal_state);
-			var to_nonterminal = new LALR.DPDA.ReadTransition;
-			to_nonterminal.to(nonterminal_state);
-			to_nonterminal.symbol(EPSILON());
-			cfsm.add_transition_from(state, to_nonterminal);
-
-			string continuation_state = anon_state();
-			cfsm.add_state_if_not_present(continuation_state);
-			var continuation = new LALR.DPDA.ReadTransition;
-			continuation.to(continuation_state);
-			continuation.symbol(symbol);
-			cfsm.add_transition_from(state, continuation);
-			state = continuation_state;
+			state = existing_state;
 		    }
 		    cfsm.make_state_push(state);
 		}
