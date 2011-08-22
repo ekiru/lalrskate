@@ -73,4 +73,23 @@ class DPDATest {
 	self.assert.equal(0, dpda.transitions_from("2"));
 	self.assert.equal(0, dpda.transitions_from("3"));
     }
+
+    function test_adequacy() {
+	using LALR.Generator.BuildCFSM.hash_state_for;
+	var dpda = new LALR.DPDA;
+	dpda.add_state('1');
+	dpda.add_state('2');
+
+	var transition = new LALR.DPDA.ReadTransition;
+	dpda.symbol(hash_state_for('A', 0));
+	dpda.to('2');
+	dpda.add_transition_from('1', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	dpda.symbol('1');
+	dpda.to('2');
+	dpda.add_transition_from('1', transition);
+
+	self.assert.is_false(dpda.is_adequate());
+    }
 }
