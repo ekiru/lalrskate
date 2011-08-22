@@ -14,26 +14,28 @@ namespace Generator {
 		if (transitions[i] instanceof LALR.DPDA.ReadTransition && string(transitions[i].symbol()) == EPSILON()) {
 		    string to = transitions[i].to();
 		    delete transitions[i];
-		    var state_stack = [ [ state, dpda.transitions_from(to) ] ];
+		    var state_stack = [ [ state, to ] ];
 		    var symbol_states = {};
 		    while (state_stack) {
 			var tuple;
 			${ pop tuple, state_stack };
 			string dest_state = tuple[0];
-			var transitions = tuple[1];
+			string eps_state = tuple[1];
+			if (dest_state == eps_state)
+			    continue;
+
 			if (!exists symbol_states[dest_state]) {
 			    symbol_states[dest_state] = {};
 			    for (var transition in dpda.transitions_from(dest_state))
 				symbol_states[dest_state][transition.symbol()] = transition.to();
 			}
-			for (var transition in transitions) {
+			for (var transition in dpda.transitions_from(eps_state)) {
 			    if (transition instanceof LALR.DPDA.ReadTransitions && string(transition.symbol()) == EPSILON()) {
-				${ push state_stack, [ dest_state, dpda.transitions_from(transition.to()) ] };
+				${ push state_stack, [ dest_state, transition.to() ] };
 			    } else {
 				if (exists symbol_states[dest_state][transition.symbol()]) {
 				    string new_dest = symbol_states[dest_state][transition.symbol()];
-				    var new_trans = dpda.transitions_from(transition.to());
-				    ${ push state_stack, [ new_dest, new_trans ] };
+				    ${ push state_stack, [ new_dest, transition.to() ] };
 				} else {
 				    dpda.add_transition_from(dest_state, transition);
 				}
