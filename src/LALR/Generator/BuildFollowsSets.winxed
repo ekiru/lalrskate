@@ -17,11 +17,15 @@ namespace Generator {
 		    for (int i = 0; i < elements(production); i++) {
 			if (grammar.is_nonterminal(production[i])) {
 			    string A = production[i];
+			    if (!exists sets[1][A]) {
+				sets[1][A] = {};
+			    }
 			    int j = i + 1;
 			    while (j < elements(production) && exists first[1][production[j]][EPSILON()]) {
 				j++;
 			    }
 			    if (j == elements(production)) {
+				say(sets[1][nonterm] == null);
 				for (string symbol in sets[1][nonterm]) {
 				    if (!exists sets[1][A][symbol]) {
 					changed = 1;
@@ -29,6 +33,8 @@ namespace Generator {
 				    }
 				}
 			    }
+			    if (i + 1 == elements(production))
+				continue;
 			    if (grammar.is_nonterminal(production[i + 1])) {
 				for (string symbol in first[1][production[i + 1]]) {
 				    if (!exists sets[1][A][symbol]) {

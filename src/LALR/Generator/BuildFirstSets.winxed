@@ -33,20 +33,24 @@ namespace Generator {
 				changed = 1;
 				sets[1][nonterm][first] = 1;
 			    }
+			    break;
 			} else if (grammar.is_nonterminal(first)) {
+			    if (!exists sets[1][first])
+				break;
 			    for (string symbol in sets[1][first]) {
 				if (symbol == EPSILON()) {
 				    found_epsilon = 1;
 				    production = clone(production);
 				    var ignore;
 				    ${ shift ignore, production };
+				    continue;
 				} else if (!exists sets[1][nonterm][symbol]) {
 				    changed = 1;
 				    sets[1][nonterm][symbol] = 1;
 				}
 			    }
 			}
-		    } while (production);
+		    } while (found_epsilon);
 		}
 	    }
 	}
