@@ -10,6 +10,13 @@ class ReadTransition : LALR.DPDA.Transition {
 	return self.symbol;
     }
 
+    var lookahead_set;
+    function lookahead_set(set[optional], int has_set[opt_flag]) {
+	if (has_set)
+	    self.lookahead_set = set;
+	return self.lookahead_set;
+    }
+
     function is_hash_transition() {
 	return substr(self.symbol, 0, length("__CFSM_HASH")) == "__CFSM_HASH";
     }

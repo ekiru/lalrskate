@@ -5,6 +5,8 @@ class Generator {
     var cfsm;
     var ntt;
     var p_state_sets;
+    var first_sets;
+    var follows_sets;
     var lookback_sets;
 
     function expect_grammar() {
@@ -23,10 +25,22 @@ class Generator {
 	if (self.p_state_sets == null)
 	    throw "P-state sets not set.";
     }
+
+    function expect_first_sets() {
+	if (self.first_sets == null)
+	    throw "First state sets not set.";
+    }
+
+    function expect_follows_sets() {
+	if (self.follows_sets == null)
+	    throw "Follows state sets not set.";
+    }
+
     function expect_lookback_sets() {
 	if (self.lookback_sets == null)
 	    throw "Lookback sets not set.";
     }
+
 
     function generate(grammar) {
 	self.grammar = grammar;
@@ -36,9 +50,13 @@ class Generator {
 	self.build_nonterminal_transition_table();
 	self.build_p_state_sets();
 	if (!self.cfsm.is_adequate()) {
-	    throw "Grammar is not LR(0).";
+	    self.build_simple_1_lookahead_sets();
+	}
+	if (!self.is_slr1()) {
+	    throw "Grammar is not SLR(1).";
 	}
 	self.build_lookback_sets();
+	self.add_lookahead();
 	self.add_lookback();
 	self.delete_transitions_under_nonterminals();
 	self.explicitly_push_states();
@@ -71,6 +89,49 @@ class Generator {
 	self.expect_grammar();
 	self.expect_cfsm();
 	self.p_state_sets = build_p_state_sets(self.grammar, self.cfsm);
+    }
+
+    function build_first_sets() {
+	using LALR.Generator.build_first_sets;
+	self.expect_grammar();
+
+	self.first_sets = build_first_sets(1, self.grammar);
+    }
+
+    function build_follows_sets() {
+	using LALR.Generator.build_follows_sets;
+	self.expect_grammar();
+	self.expect_first_sets();
+
+	self.follows_sets = build_follows_sets(1, self.grammar, self.first_sets);
+    }
+
+    function build_simple_1_lookahead_sets() {
+	using LALR.Generator.build_simple_lookahead_sets;
+	self.expect_grammar();
+	self.expect_cfsm();
+	self.expect_follows_sets();
+
+	build_simple_lookahead_sets(1, self.grammar, self.cfsm, self.follows_sets);
+    }
+
+    function is_slr1() {
+	self.expect_cfsm();
+	for (string state in self.cfsm.states()) {
+	    if (self.cfsm.is_adequate_state(state)) {
+		continue;
+	    }
+
+	    var symbols = {};
+	    for (var transition in self.cfsm.transitions_from(state)) {
+		for (string symbol in transition.lookahead_set()) {
+		    if (exists symbols[symbol]) // The lookahead-sets are not disjoint.
+			return 0;
+		    symbols[symbol] = 1;
+		}
+	    }
+	}
+	return 1;
     }
 
     function build_lookback_sets() {

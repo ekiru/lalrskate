@@ -33,7 +33,6 @@ namespace Generator {
 			    transition.production_number(i);
 			    transition.to(r_prime);
 			    transitions[j] = transition;
-			    break;
 			}
 		    }
 
