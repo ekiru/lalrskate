@@ -91,4 +91,25 @@ class BuildCFSMTest {
 	self.assert.equal(2, transitions);
     }
 
+    function test_no_ambiguity_for_shared_prefixes() {
+	using LALR.Generator.build_CFSM;
+	var grammar = new LALR.Grammar;
+	grammar.add_terminal('+');
+	grammar.add_terminal('1');
+	grammar.add_terminal('0');
+	grammar.add_nonterminal('S');
+	grammar.start('S');
+	grammar.add_rule('S', '+', '1');
+	grammar.add_rule('S', '+', '0');
+
+	var cfsm = build_CFSM(grammar);
+
+	self.assert.equal(1, elements(cfsm.transitions_from(cfsm.start())));
+
+	var transition = cfsm.transitions_from(cfsm.start())[0];
+	self.assert.is_true(transition instanceof LALR.DPDA.ReadTransition);
+	self.assert.equal('+', transition.symbol());
+
+    }
+
 }
