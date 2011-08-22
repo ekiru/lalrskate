@@ -15,16 +15,28 @@ namespace Generator {
 		    string to = transitions[i].to();
 		    delete transitions[i];
 		    var state_stack = [ [ state, dpda.transitions_from(to) ] ];
+		    var symbol_states = {};
 		    while (state_stack) {
 			var tuple;
 			${ pop tuple, state_stack };
 			string dest_state = tuple[0];
 			var transitions = tuple[1];
+			if (!exists symbol_states[dest_state]) {
+			    symbol_states[dest_state] = {};
+			    for (var transition in dpda.transitions_from(dest_state))
+				symbol_states[dest_state][transition.symbol()] = transition.to();
+			}
 			for (var transition in transitions) {
 			    if (transition instanceof LALR.DPDA.ReadTransitions && string(transition.symbol()) == EPSILON()) {
 				${ push state_stack, [ dest_state, dpda.transitions_from(transition.to()) ] };
 			    } else {
-				dpda.add_transition_from(dest_state, transition);
+				if (exists symbol_states[dest_state][transition.symbol()]) {
+				    string new_dest = symbol_states[dest_state][transition.symbol()];
+				    var new_trans = dpda.transitions_from(transition.to());
+				    ${ push state_stack, [ new_dest, new_trans ] };
+				} else {
+				    dpda.add_transition_from(dest_state, transition);
+				}
 			    }
 			}
 		    }
