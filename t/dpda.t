@@ -81,13 +81,13 @@ class DPDATest {
 	dpda.add_state('2');
 
 	var transition = new LALR.DPDA.ReadTransition;
-	dpda.symbol(hash_state_for('A', 0));
-	dpda.to('2');
+	transition.symbol(hash_state_for('A', 0));
+	transition.to('2');
 	dpda.add_transition_from('1', transition);
 
 	transition = new LALR.DPDA.ReadTransition;
-	dpda.symbol('1');
-	dpda.to('2');
+	transition.symbol('1');
+	transition.to('2');
 	dpda.add_transition_from('1', transition);
 
 	self.assert.is_false(dpda.is_adequate());
