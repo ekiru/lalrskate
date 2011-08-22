@@ -76,4 +76,80 @@ class EpsilonEliminationTest {
 	self.assert.equal("a", a_trans.symbol());
     }
 
+    function test_does_not_create_ambiguity() {
+	using LALR.DPDA.EPSILON;
+	using LALR.Generator.eliminate_epsilon_transitions;
+	var dpda = new LALR.DPDA;
+	dpda.add_state('0');
+	dpda.add_state('1');
+	dpda.add_state('2');
+	dpda.add_state('3');
+	dpda.add_state('4');
+
+	var transition = new LALR.DPDA.ReadTransition;
+	transition.to('1');
+	transition.symbol('+');
+	dpda.add_transition_from('0', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.to('2');
+	transition.symbol(EPSILON());
+	dpda.add_transition_from('0', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.to('3');
+	transition.symbol('+');
+	dpda.add_transition_from('2', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.to('4');
+	transition.symbol('1');
+	dpda.add_transition_from('1', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.to('4');
+	transition.symbol('3');
+	dpda.add_transition_from('3', transition);
+
+	eliminate_epsilon_transitions(dpda);
+
+	self.assert.equal(1, elements(dpda.transitions_from('0')));
+	self.assert.equal(2, elements(dpda.transitions_from(dpda.transitions_from('0')[0].to())));
+    }
+
+    function test_transitive_epsilon_elimination() {
+	using LALR.DPDA.EPSILON;
+	using LALR.Generator.eliminate_epsilon_transitions;
+	var dpda = new LALR.DPDA;
+	dpda.add_state('0');
+	dpda.add_state('1');
+	dpda.add_state('2');
+	dpda.add_state('3');
+	dpda.add_state('4');
+
+	var transition = new LALR.DPDA.ReadTransition;
+	transition.symbol(EPSILON());
+	transition.to('1');
+	dpda.add_transition_from('0', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.symbol('1');
+	transition.to('2');
+	dpda.add_transition_from('1', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.symbol(EPSILON());
+	transition.to('3');
+	dpda.add_transition_from('1', transition);
+
+	transition = new LALR.DPDA.ReadTransition;
+	transition.symbol('3');
+	transition.to('4');
+	dpda.add_transition_from('3', transition);
+
+	eliminate_epsilon_transitions(dpda);
+
+	self.assert.equal(2, elements(dpda.transitions_from('0')));
+    }
+
 }
