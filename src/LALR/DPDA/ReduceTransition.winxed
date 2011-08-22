@@ -2,9 +2,17 @@ namespace LALR {
 namespace DPDA {
 
 class ReduceTransition : LALR.DPDA.Transition {
+    var lookahead_set;
     var pop_count;
     var production_name;
     var production_number;
+
+    function lookahead_set(set[optional], int has_set[opt_flag]) {
+	if (has_set) {
+	    self.lookahead_set = set;
+	}
+	return self.lookahead_set;
+    }
 
     function pop_count(int count[optional], int has_count[opt_flag]) {
 	if (has_count) {
@@ -25,6 +33,10 @@ class ReduceTransition : LALR.DPDA.Transition {
 	    self.production_number = number;
 	}
 	return self.production_number;
+    }
+
+    function is_hash_transition() {
+	return true;
     }
 
 }

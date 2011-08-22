@@ -93,6 +93,23 @@ class Interpreter {
 	    }
 	    self.error_occurred = 1;
 	    return;
+	} else if (transitions[0] instanceof LALR.DPDA.LookaheadTransition) {
+	    if (!self.input) {
+		throw "Unexpected end of input.";
+	    }
+	    for (var transition in transitions) {
+		if (!(transition instanceof LALR.DPDA.LookaheadTransition)) {
+		    throw "Expected a LookaheadTransition.";
+		}
+
+		for (string symbol in transition.lookahead_set()) {
+		    if (symbol == self.input[0]) {
+			self.state = transition.to();
+			return;
+		    }
+		}
+	    }
+	    self.error_occurred = 1;
 	} else if (transitions[0] instanceof LALR.DPDA.PushTransition) {
 	    if (transitions != 1) {
 		throw "Cannot have a push transition and another transition.";

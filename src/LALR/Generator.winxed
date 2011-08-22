@@ -58,8 +58,8 @@ class Generator {
 	    throw "Grammar is not SLR(1).";
 	}
 	self.build_lookback_sets();
-	self.add_lookahead();
 	self.add_lookback();
+	self.add_lookahead();
 	self.delete_transitions_under_nonterminals();
 	self.explicitly_push_states();
 	self.remove_unreachable_states();

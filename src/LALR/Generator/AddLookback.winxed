@@ -28,6 +28,7 @@ namespace Generator {
 			var transition = transitions[j];
 			if (transition instanceof LALR.DPDA.ReadTransition && transition.symbol() == hash_symbol) {
 			    var transition = new LALR.DPDA.ReduceTransition;
+			    transition.lookahead_set(transitions[j].lookahead_set());
 			    transition.pop_count(elements(grammar.rule(nonterm)[i]));
 			    transition.production_name(nonterm);
 			    transition.production_number(i);
