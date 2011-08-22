@@ -1,0 +1,15 @@
+namespace LALR {
+namespace DPDA {
+
+class LookaheadTransition : LALR.DPDA.Transition {
+    var lookahead_set;
+    function lookahead_set(set[optional], int has_set[opt_flag]) {
+	if (has_set) {
+	    self.lookahead_set = clone(set);
+	}
+	return self.lookahead_set;
+    }
+}
+
+}
+}

@@ -118,7 +118,7 @@ class Generator {
     function is_slr1() {
 	self.expect_cfsm();
 	for (string state in self.cfsm.states()) {
-	    if (self.cfsm.is_adequate_state(state)) {
+	    if (self.cfsm.is_state_adequate(state)) {
 		continue;
 	    }
 
@@ -141,6 +141,13 @@ class Generator {
 	self.expect_ntt();
 	self.expect_p_state_sets();
 	self.lookback_sets = build_lookback_sets(self.grammar, self.cfsm, self.ntt, self.p_state_sets);
+    }
+
+    function add_lookahead() {
+	using LALR.Generator.add_lookahead;
+	self.expect_grammar();
+	self.expect_cfsm();
+	add_lookahead(self.grammar, self.cfsm);
     }
 
     function add_lookback() {

@@ -1,0 +1,36 @@
+namespace LALR {
+namespace Generator {
+
+    function build_simple_lookahead_sets(int k, grammar, cfsm, follows) {
+	using LALR.Generator.BuildCFSM.hash_state_for;
+	if (k > 1) {
+	    throw "Building simple k lookahead sets for k > 1 is not implemented.";
+	}
+
+	var hash_symbols = {};
+	for (string nonterm in grammar.nonterminals()) {
+	    var productions = grammar.rule(nonterm);
+	    for (int i = 0; i < elements(productions); i++) {
+		hash_symbols[hash_state_for(nonterm, i)] = nonterm;
+	    }
+	}
+
+	for (string state in cfsm.states()) {
+	    if (cfsm.is_state_adequate(state))
+		continue;
+	    for (var transition in cfsm.transitions_from(state)) {
+		var set = {};
+		if (transition.is_hash_transition()) {
+		    string nonterm = 
+		    set = clone(follows[1][nonterm]);
+		} else {
+		    set[transition.symbol()] = 1;
+		}
+
+		transition.lookahead_set(set);
+	    }
+	}
+    }
+
+}
+}
