@@ -53,6 +53,7 @@ class Grammar {
     /* Adds a new nonterminal to the grammar. */
     function add_nonterminal(string name) {
         self.nonterminals[name] = 1;
+        self.rules[name] = [];
     }
 
     /* Tests whether the grammar contains a nonterminal with the given name. */
@@ -116,10 +117,9 @@ class Grammar {
      * The behavior is unspecified if this list is modified.
      */
     function rule(string name) {
-        if (exists self.rules[name])
-            return self.rules[name];
-        else
-            return null;
+        self.expect_nonterminal(name);
+        return self.rules[name];
+
     }
 
     /* g.rule(name, ...) adds a production stating that the nonterminal name
