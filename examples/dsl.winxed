@@ -1,0 +1,129 @@
+#!/usr/bin/env winxed --nowarn
+
+function main[main](args) {
+    load_bytecode('lalr.pbc');
+    using LALR.DPDA.parse;
+    var dpda = get_dpda();
+    
+//    prettyprint(dpda);
+    var input = [];
+    var grammar = parse(dpda, input);
+    print(grammar.as_bnf_string());
+}
+
+function get_dpda() {
+    var grammar = get_grammar();
+    return (new LALR.Generator).generate(grammar);
+}
+
+function get_grammar() {
+    var grammar = new LALR.Grammar;
+
+    grammar.add_terminal('comma');
+    grammar.add_terminal('semicolon');
+    grammar.add_terminal('start');
+    grammar.add_terminal('symbol');
+    grammar.add_terminal('terminal');
+    grammar.add_terminal('nonterminal');
+    grammar.add_terminal('arrow');
+
+    grammar.add_nonterminal('Grammar');
+    grammar.add_nonterminal('Terminals');
+    grammar.add_nonterminal('Nonterminals');
+    grammar.add_nonterminal('Start');
+    grammar.add_nonterminal('Options');
+    grammar.add_nonterminal('Rules');
+    grammar.add_nonterminal('TerminalDeclaration');
+    grammar.add_nonterminal('NonterminalDeclaration');
+    grammar.add_nonterminal('Rule');
+    grammar.add_nonterminal('Symbols');
+
+    grammar.start('Grammar');
+
+    grammar.add_rule('Grammar',
+		     'Terminals', 'semicolon', 'Nonterminals', 'semicolon',
+		     'Start', 'semicolon', 'Options', 'semicolon',
+		     'Rules');
+    grammar.add_rule('Terminals',
+		     'TerminalDeclaration');
+    grammar.add_rule('Terminals',
+		     'TerminalDeclaration', 'comma', 'Terminals');
+    grammar.add_rule('Nonterminals',
+		     'NonterminalDeclaration');
+    grammar.add_rule('Nonterminals',
+		     'NonterminalDeclaration', 'comma', 'Nonterminals');
+    grammar.add_rule('Start',
+		     'start', 'symbol');
+    grammar.add_rule('Options');
+    grammar.add_rule('Rules',
+		     'Rule');
+    grammar.add_rule('Rules',
+		     'Rule', 'semicolon', 'Rules');
+    grammar.add_rule('TerminalDeclaration',
+		     'terminal', 'symbol');
+    grammar.add_rule('NonterminalDeclaration',
+		     'nonterminal', 'symbol');
+    grammar.add_rule('Rule',
+		     'symbol', 'arrow', 'Symbols');
+    grammar.add_rule('Rule',
+		     'symbol', 'arrow');
+    grammar.add_rule('Symbols',
+		     'symbol');
+    grammar.add_rule('Symbols',
+		     'symbol', 'Symbols');
+
+    return grammar;
+}
+
+function prettyprint(dpda) {
+    say ("digraph DPDA {");
+
+    for (string state in dpda.states()) {
+	string label;
+	string beginning = substr(state, 0, 18);
+	if (beginning == "__build_CFSM__ANON") {
+	    label = "";
+	} else {
+	    label = state;
+	}
+	say("\t" + state + ' [label="' + label +  '", shape=box];');
+    }
+    say("");
+
+    for (string state in dpda.states()) {
+	for (var transition in dpda.transitions_from(state)) {
+	    string to = transition.to();
+	    if (transition instanceof LALR.DPDA.ReadTransition) {
+		string under = transition.symbol();
+		string set = '';
+		if (!dpda.is_state_adequate(state)) {
+		    set = '{';
+		    for (string symbol in transition.lookahead_set()) {
+			set = set + symbol + ', ';
+		    }
+		    set = set + '}';
+		}
+		say("\t" + state + " -> " + to + '[label="' + under + ' ' + set + '"];');
+	    } else if (transition instanceof LALR.DPDA.PushTransition) {
+		string push = transition.symbol();
+		say("\t" + state + " -> " + to + '[label="push ' + push + '"];');
+	    } else if (transition instanceof LALR.DPDA.TopTransition) {
+		string symbol = transition.expected();
+		say("\t" + state + " -> " + to + '[label="top ' + symbol + '"];');
+	    } else if (transition instanceof LALR.DPDA.ReduceTransition) {
+		string count = transition.pop_count();
+		string prod = transition.production_name();
+		string num = transition.production_number();
+		say("\t" + state + " -> " + to + '[label="pop ' + count + ', reduce ' + prod + ':' + num + '"];');
+	    } else if (transition instanceof LALR.DPDA.LookaheadTransition) {
+		string set = '{ ';
+		for (string symbol in transition.lookahead_set()) {
+		    set = set + symbol + ', ';
+		}
+		set = set + '}';
+		say("\t" + state + " -> " + to + '[label="lookahead ' + set + '"];');
+	    }
+	}
+    }
+    say("}");
+}
